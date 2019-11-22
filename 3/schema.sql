@@ -90,7 +90,7 @@ CREATE TABLE incidencia
 
 CREATE TABLE proposta_de_correcao
    (email 	                VARCHAR(255)	NOT NULL,
-    nro 	                VARCHAR(255)	NOT NULL,
+    nro 	                INTEGER     	NOT NULL,
     data_hora 	            TIMESTAMP	    NOT NULL,
     texto 	                VARCHAR(255)	NOT NULL,
     PRIMARY KEY(email, nro),
@@ -105,9 +105,3 @@ CREATE TABLE correcao
     FOREIGN KEY(email, nro) REFERENCES proposta_de_correcao(email, nro) ON DELETE CASCADE,
     FOREIGN KEY (anomalia_id) REFERENCES incidencia(anomalia_id) ON DELETE CASCADE ON UPDATE CASCADE,
     CHECK (email LIKE '%@%'));
-
-----------------------------------------
--- Populate Relations 
-----------------------------------------
-
----insert into customer values ('Adams',	'Main Street',	'Lisbon');
