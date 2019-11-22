@@ -30,8 +30,8 @@ CREATE TABLE item
 
 CREATE TABLE anomalia
    (id 	                    INTEGER	        NOT NULL,
-    zona	                VARCHAR(255)	NOT NULL,
-    imagem 	                BYTEA(255)	    NOT NULL,
+    zona	                BOX             NOT NULL,
+    imagem 	                BYTEA   	    NOT NULL,
     lingua 	                VARCHAR(255)	NOT NULL,
     ts 	                    TIMESTAMP	    NOT NULL,
     descricao 	            VARCHAR(255)	NOT NULL,
@@ -40,7 +40,7 @@ CREATE TABLE anomalia
 
 CREATE TABLE anomalia_traducao
    (id 	                    INTEGER	        NOT NULL,
-    zona2	                VARCHAR(255)	NOT NULL,
+    zona2	                BOX         	NOT NULL,
     lingua2 	            VARCHAR(255)	NOT NULL,
     PRIMARY KEY(id),
     FOREIGN KEY(id) REFERENCES anomalia(id));
