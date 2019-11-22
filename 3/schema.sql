@@ -31,7 +31,7 @@ CREATE TABLE item
 CREATE TABLE anomalia
    (id 	INTEGER	NOT NULL,
     zona	VARCHAR(255)	NOT NULL,
-    imagem 	VARCHAR(255)	NOT NULL,
+    imagem 	BYTEA	NOT NULL,
     lingua 	VARCHAR(255)	NOT NULL,
     ts 	TIMESTAMP	NOT NULL,
     descricao 	VARCHAR(255)	NOT NULL,
