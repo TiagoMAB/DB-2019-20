@@ -57,18 +57,21 @@ CREATE TABLE duplicado
 CREATE TABLE utilizador
    (email 	                VARCHAR(255)	NOT NULL,
     passsword	            VARCHAR(255)    NOT NULL,
-    PRIMARY KEY(email));
+    PRIMARY KEY(email),
+    CHECK (email LIKE '%@%'));
 
 CREATE TABLE utilizador_qualificado
    (email 	                VARCHAR(255)	NOT NULL,
     PRIMARY KEY(email),
-    FOREIGN KEY(email) REFERENCES utilizador(email));
+    FOREIGN KEY(email) REFERENCES utilizador(email),
+    CHECK (email LIKE '%@%'));
     --CHECK (email NOT IN (SELECT email FROM utilizador_regular)));
 
 CREATE TABLE utilizador_regular
    (email 	                VARCHAR(255)	NOT NULL,
     PRIMARY KEY(email),
-    FOREIGN KEY(email) REFERENCES utilizador(email));
+    FOREIGN KEY(email) REFERENCES utilizador(email),
+    CHECK (email LIKE '%@%'));
     --CHECK (email NOT IN (SELECT email FROM utilizador_qualificado)));
 
 CREATE TABLE incidencia
@@ -78,7 +81,8 @@ CREATE TABLE incidencia
     PRIMARY KEY(anomalia_id),
     FOREIGN KEY(anomalia_id) REFERENCES anomalia(id),
     FOREIGN KEY(item_id) REFERENCES item(id),
-    FOREIGN KEY(email) REFERENCES utilizador(email));
+    FOREIGN KEY(email) REFERENCES utilizador(email),
+    CHECK (email LIKE '%@%'));
 
 CREATE TABLE proposta_de_correcao
    (email 	                VARCHAR(255)	NOT NULL,
@@ -86,7 +90,8 @@ CREATE TABLE proposta_de_correcao
     data_hora 	            TIMESTAMP	    NOT NULL,
     texto 	                VARCHAR(255)	NOT NULL,
     PRIMARY KEY(email, nro),
-    FOREIGN KEY(email) REFERENCES utilizador_qualificado(email));
+    FOREIGN KEY(email) REFERENCES utilizador_qualificado(email),
+    CHECK (email LIKE '%@%'));
 
 CREATE TABLE correcao
    (email 	                VARCHAR(255)	NOT NULL,
@@ -94,7 +99,8 @@ CREATE TABLE correcao
     anomalia_id             INTEGER         NOT NULL,
     PRIMARY KEY(email, nro, anomalia_id),
     FOREIGN KEY(email, nro) REFERENCES proposta_de_correcao(email, nro),
-    FOREIGN KEY (anomalia_id) REFERENCES incidencia(anomalia_id));
+    FOREIGN KEY (anomalia_id) REFERENCES incidencia(anomalia_id),
+    CHECK (email LIKE '%@%'));
 
 ----------------------------------------
 -- Populate Relations 
