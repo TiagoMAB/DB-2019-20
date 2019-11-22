@@ -16,7 +16,7 @@ DROP TABLE IF EXISTS correcao cascade;
 CREATE TABLE local_publico
    (latitude 	FLOAT	NOT NULL,
     longitude 	FLOAT	NOT NULL,
-    nome 	VARCHAR(80)	NOT NULL,
+    nome 	VARCHAR(255)	NOT NULL,
     CONSTRAINT pk_local_publico PRIMARY KEY(latitude, longitude));
 
 CREATE TABLE item
@@ -25,7 +25,6 @@ CREATE TABLE item
     localizacao 	VARCHAR(255)	NOT NULL,
     latitude 	FLOAT	NOT NULL,
     longitude 	FLOAT	NOT NULL,
-    assets 		NUMERIC(16,4)	NOT NULL,
     CONSTRAINT pk_item PRIMARY KEY(id),
     CONSTRAINT fk_item_local_publico FOREIGN KEY(latitude, longitude) REFERENCES local_publico(latitude, longitude));
 
@@ -53,7 +52,7 @@ CREATE TABLE duplicado
     CONSTRAINT pk_duplicado PRIMARY KEY(item1, item2),
     CONSTRAINT fk_duplicado_item1 FOREIGN KEY(item1) REFERENCES item(id),
     CONSTRAINT fk_duplicado_item2 FOREIGN KEY(item2) REFERENCES item(id));
-    --CONSTRAINT chk_duplicado CHECK (item1 < item2));
+    CONSTRAINT chk_duplicado CHECK (item1 < item2));
 
 CREATE TABLE utilizador
    (email 	VARCHAR(255)	NOT NULL,
@@ -84,7 +83,7 @@ CREATE TABLE incidencia
 CREATE TABLE proposta_de_correcao
    (email 	VARCHAR(255)	NOT NULL,
     nro 	VARCHAR(255)	NOT NULL,
-    data_text 	TIMESTAMP	NOT NULL,
+    data_hora 	TIMESTAMP	NOT NULL,
     texto 	VARCHAR(255)	NOT NULL,
     CONSTRAINT pk_proposta_de_correcao PRIMARY KEY(email, nro),
     CONSTRAINT fk_proposta_de_correcao_utilizador_qualificado FOREIGN KEY(email) REFERENCES utilizador_qualificado(email));
