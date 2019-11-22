@@ -1,10 +1,10 @@
 --  local_publico   --
 
-INSERT INTO local_publico VALUES (42.112316,    -55.650346,    'Praca publica');
-INSERT INTO local_publico VALUES (78.081231,    -37.823458,    'Rua publica');
-INSERT INTO local_publico VALUES (-46.123129,   -53.496863, 'Estrada publica');
-INSERT INTO local_publico VALUES (40.232463,    128.521355, 'Predio publico');
-INSERT INTO local_publico VALUES (39.336775,    -8.936379,  'Rio Maior'); 
+INSERT INTO local_publico VALUES (42.112316,    -55.650346,     'Praca publica');
+INSERT INTO local_publico VALUES (78.081231,    -37.823458,     'Rua publica');
+INSERT INTO local_publico VALUES (-46.123129,   -53.496863,     'Estrada publica');
+INSERT INTO local_publico VALUES (40.232463,    128.521355,     'Predio publico');
+INSERT INTO local_publico VALUES (39.336775,    -8.936379,      'Rio Maior'); 
 --Esta ultima nao deve ser mudada pois e necessaria para um dos exs de SQL
 
 --  item   --
@@ -13,7 +13,8 @@ INSERT INTO item VALUES(42638,  'descricaoItem1',    'localizacaoItem1',    42.1
 INSERT INTO item VALUES(48017,  'descricaoItem2',    'localizacaoItem2',    78.081231,  -37.823458);
 INSERT INTO item VALUES(63120,  'descricaoItem3',    'localizacaoItem3',    -46.123129, -53.496863);
 INSERT INTO item VALUES(39036,  'descricaoItem4',    'localizacaoItem4',    40.232463,  128.521355);
-INSERT INTO item VALUES(97666,  'descricaoItem5',    'localizacaoItem5',    39.336775,  -8.936379);
+INSERT INTO item VALUES(23466,  'descricaoItem5',    'localizacaoItem5',    40.232463,  128.521355);
+INSERT INTO item VALUES(97666,  'descricaoItem6',    'localizacaoItem6',    39.336775,  -8.936379);
 
 --  anomalia   --
 --No lugar da imagem, BYTEA, tem random hexadecimal stuff
@@ -76,10 +77,10 @@ INSERT INTO utilizador_regular VALUES('email_utilizador_regular_8@emailorg.com')
 
  --  incidencia   --
 
-INSERT INTO incidencia VALUES(75739,    42638,  'email_utilizador_regular_8@emailorg.com');
-INSERT INTO incidencia VALUES(84433,    48017,  'email_utilizador_qualificado_2@emailorg.com');
-INSERT INTO incidencia VALUES(48651,    63120,  'email_utilizador_qualificado_2@emailorg.com');
-INSERT INTO incidencia VALUES(57003,    39036,  'email_utilizador_regular_7@emailorg.com');
+INSERT INTO incidencia VALUES(75739,    42638,  'email_utilizador_qualificado_6@emailorg.com');
+INSERT INTO incidencia VALUES(84433,    48017,  'email_utilizador_regular_2@emailorg.com');
+INSERT INTO incidencia VALUES(48651,    63120,  'email_utilizador_regular_2@emailorg.com');
+INSERT INTO incidencia VALUES(57003,    39036,  'email_utilizador_qualificado_7@emailorg.com');
 INSERT INTO incidencia VALUES(90833,    97666,  'email_utilizador_qualificado_8@emailorg.com');
 
  --  proposta_de_correcao   --
