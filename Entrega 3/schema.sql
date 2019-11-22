@@ -1,16 +1,16 @@
-----
---drop table local_público cascade;
---drop table item cascade;
---drop table anomalia cascade;
---drop table anomalia_tradução cascade;
---drop table duplicado cascade;
---drop table utilizador cascade;
---drop table utilizador_qualificado cascade;
---drop table utilizador_regular cascade;
---drop table incidência cascade;
---drop table proposta_de_correção cascade;
---drop table correção cascade;
-----
+
+drop table if exists local_publico cascade;
+drop table if exists item cascade;
+drop table if exists anomalia cascade;
+drop table if exists anomalia_traducao cascade;
+drop table if exists duplicado cascade;
+drop table if exists utilizador cascade;
+drop table if exists utilizador_qualificado cascade;
+drop table if exists utilizador_regular cascade;
+drop table if exists incidencia cascade;
+drop table if exists proposta_de_correcao cascade;
+drop table if exists correcao cascade;
+
 ----------------------------------------
 -- Table Creation
 ----------------------------------------
@@ -20,21 +20,21 @@
 --   1. pk_table for names of primary key constraints
 --   2. fk_table_another for names of foreign key constraints
 
-create table local_público
+create table local_publico
    (latitude 	float	not null,
     longitude 	float	not null,
     nome 	varchar(80)	not null,
-    constraint pk_local_público primary key(latitude, longitude));
+    constraint pk_local_publico primary key(latitude, longitude));
 
 create table item
    (id 	integer	not null,
-    descrição 	varchar(255)	not null,
-    localização 	varchar(255)	not null,
+    descricao 	varchar(255)	not null,
+    localizacao 	varchar(255)	not null,
     latitude 	float	not null,
     longitude 	float	not null,
     assets 		numeric(16,4)	not null,
     constraint pk_item primary key(id),
-    constraint fk_item_local_público foreign key(latitude, longitude) references local_público(latitude, longitude));
+    constraint fk_item_local_publico foreign key(latitude, longitude) references local_publico(latitude, longitude));
 
 create table anomalia
    (id 	integer	not null,
@@ -42,24 +42,25 @@ create table anomalia
     imagem 	varchar(255)	not null,
     lingua 	varchar(255)	not null,
     ts 	timestamp	not null,
-    descrição 	varchar(255)	not null,
-    tem_anomalia_redação  bit(1)	not null,
+    descricao 	varchar(255)	not null,
+    tem_anomalia_redacao  bit(1)	not null,
     constraint pk_anomalia primary key(id));
 
-create table anomalia_tradução
+create table anomalia_traducao
    (id 	integer	not null,
     zona2	varchar(255)	not null,
     lingua2 	varchar(255)	not null,
-    constraint pk_anomalia_tradução primary key(id),
-    constraint fk_anomalia_tradução_anomalia foreign key(id) references anomalia(id),
-    constraint chk_anomalia_tradução check (zona2 <> (SELECT zona FROM anomalia WHERE id = pk_anomalia_tradução) AND lingua2 <> (SELECT lingua FROM anomalia WHERE id = pk_anomalia_tradução)));
+    constraint pk_anomalia_traducao primary key(id),
+    constraint fk_anomalia_traducao_anomalia foreign key(id) references anomalia(id),
+    constraint chk_anomalia_traducao check (zona2 <> (SELECT zona FROM anomalia WHERE id = pk_anomalia_traducao) AND lingua2 <> (SELECT lingua FROM anomalia WHERE id = pk_anomalia_traducao)));
 
 create table duplicado
    (item1 	integer	not null,
     item2 	integer	not null,
     constraint pk_duplicado primary key(item1, item2),
-    constraint fk_duplicado_item foreign key(item1,item2) references item(id),
-    constraint chk_duplicado check (item1 < item2));
+    constraint fk_duplicado_item1 foreign key(item1) references item(id),
+    constraint fk_duplicado_item2 foreign key(item2) references item(id));
+    --constraint chk_duplicado check (item1 < item2));
 
 create table utilizador
    (email 	varchar(255)	not null,
@@ -78,32 +79,32 @@ create table utilizador_regular
     constraint fk_utilizador_regular_utilizador foreign key(email) references utilizador(email),
     constraint chk_utilizador_regular check (email NOT IN (SELECT email FROM utilizador_qualificado)));
 
-create table incidência
+create table incidencia
    (anomalia_id 	integer not null,
     item_id 	integer not null,
     email 	varchar(255)	not null,
-    constraint pk_incidência primary key(anomalia_id),
-    constraint fk_incidência_anomalia foreign key(anomalia_id) references anomalia(id),
-    constraint fk_incidência_item foreign key(item_id) references item(id),
-    constraint fk_incidência_utilizador foreign key(email) references utilizador(email));
+    constraint pk_incidencia primary key(anomalia_id),
+    constraint fk_incidencia_anomalia foreign key(anomalia_id) references anomalia(id),
+    constraint fk_incidencia_item foreign key(item_id) references item(id),
+    constraint fk_incidencia_utilizador foreign key(email) references utilizador(email));
 
-create table proposta_de_correção
+create table proposta_de_correcao
    (email 	varchar(255)	not null,
     nro 	varchar(255)	not null,
     data_text 	datetime	not null,
     texto 	varchar(255)	not null,
-    constraint pk_proposta_de_correção primary key(email, nro),
-    constraint fk_proposta_de_correção_utilizador_qualificado foreign key(email) references utilizador_qualificado(email));
+    constraint pk_proposta_de_correcao primary key(email, nro),
+    constraint fk_proposta_de_correcao_utilizador_qualificado foreign key(email) references utilizador_qualificado(email));
 
-    ---Não percebo a parte em que diz que "email e nro têm de figurar em correção"
+    ---Não percebo a parte em que diz que "email e nro têm de figurar em correcao"
 
-create table correção
+create table correcao
    (email 	varchar(255)	not null,
     nro 	varchar(255)	not null,
     anomalia_id     integer     not null,
-    constraint pk_proposta_de_correção primary key(email, nro, anomalia_id),
-    constraint fk_correção_proposta_de_correção foreign key(email, nro) references proposta_de_correção(email, nro),
-    constraint fk_correção_incidência foreign key (anomalia_id) references incidência(anomalia_id)); 
+    constraint pk_proposta_de_correcao primary key(email, nro, anomalia_id),
+    constraint fk_correcao_proposta_de_correcao foreign key(email, nro) references proposta_de_correcao(email, nro),
+    constraint fk_correcao_incidencia foreign key (anomalia_id) references incidencia(anomalia_id)); 
 
 ----------------------------------------
 -- Populate Relations 
