@@ -17,7 +17,9 @@ CREATE TABLE local_publico
    (latitude 	            FLOAT	        NOT NULL,
     longitude 	            FLOAT	        NOT NULL,
     nome 	                VARCHAR(255)	NOT NULL,
-    PRIMARY KEY(latitude, longitude));
+    PRIMARY KEY(latitude, longitude),
+    CHECK (latitude <= 90 AND latitude >= -90),
+    CHECK (longitude <= 180 AND latitude >= -180));
 
 CREATE TABLE item
    (id 	                    INTEGER	        NOT NULL,
@@ -26,7 +28,9 @@ CREATE TABLE item
     latitude 	            FLOAT	        NOT NULL,
     longitude 	            FLOAT	        NOT NULL,
     PRIMARY KEY(id),
-    FOREIGN KEY(latitude, longitude) REFERENCES local_publico(latitude, longitude));
+    FOREIGN KEY(latitude, longitude) REFERENCES local_publico(latitude, longitude),
+    CHECK (latitude <= 90 AND latitude >= -90),
+    CHECK (longitude <= 180 AND latitude >= -180));
 
 CREATE TABLE anomalia
    (id 	                    INTEGER	        NOT NULL,
