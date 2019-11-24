@@ -11,7 +11,23 @@ DROP TABLE IF EXISTS incidencia CASCADE;
 DROP TABLE IF EXISTS proposta_de_correcao CASCADE;
 DROP TABLE IF EXISTS correcao CASCADE;
 
+DROP FUNCTION IF EXISTS verificaUtilizador;
 
+CREATE FUNCTION verificaUtilizador (emailAVerificar VARCHAR(255), qualificado INTEGER)
+RETURNS BOOLEAN
+AS
+$$
+BEGIN
+	IF qualificado = 1 AND EXISTS (SELECT email FROM utilizador_regular U WHERE U.email = emailAVerificar) THEN
+		return FALSE;
+	ELSIF qualificado = 0 AND EXISTS (SELECT email FROM utilizador_qualificado U WHERE U.email = emailAVerificar) THEN
+		return FALSE;
+	ELSE
+		return TRUE;
+	END IF;
+END;
+$$
+LANGUAGE plpgsql;
 
 CREATE TABLE local_publico
    (latitude 	            FLOAT	        NOT NULL,
@@ -68,15 +84,15 @@ CREATE TABLE utilizador_qualificado
    (email 	                VARCHAR(255)	NOT NULL,
     PRIMARY KEY(email),
     FOREIGN KEY(email) REFERENCES utilizador(email) ON DELETE CASCADE,
-    CHECK (email LIKE '%@%'));
-    --CHECK (email NOT IN (SELECT email FROM utilizador_regular)));
+    CHECK (email LIKE '%@%'),
+    CHECK (verificaUtilizador(email, 1) = TRUE));
 
 CREATE TABLE utilizador_regular
    (email 	                VARCHAR(255)	NOT NULL,
     PRIMARY KEY(email),
     FOREIGN KEY(email) REFERENCES utilizador(email) ON DELETE CASCADE,
-    CHECK (email LIKE '%@%'));
-    --CHECK (email NOT IN (SELECT email FROM utilizador_qualificado)));
+    CHECK (email LIKE '%@%'),
+    CHECK (verificaUtilizador(email, 0) = TRUE));
 
 CREATE TABLE incidencia
    (anomalia_id 	        INTEGER         NOT NULL,
