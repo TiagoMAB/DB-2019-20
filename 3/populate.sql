@@ -31,7 +31,9 @@ INSERT INTO anomalia_traducao VALUES(48651, '((1.3,7.2),(3.3,7.2))',    'ingles'
 
  --  duplicado   --
 
-
+INSERT INTO duplicado VALUES(42638, 97666);
+INSERT INTO duplicado VALUES(42638, 63120);
+INSERT INTO duplicado VALUES(39036, 48017);
 
  --  utilizador   --
 

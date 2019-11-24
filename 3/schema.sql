@@ -99,7 +99,7 @@ CREATE TABLE proposta_de_correcao
 
 CREATE TABLE correcao
    (email 	                VARCHAR(255)	NOT NULL,
-    nro 	                VARCHAR(255)	NOT NULL,
+    nro 	                INTEGER     	NOT NULL,
     anomalia_id             INTEGER         NOT NULL,
     PRIMARY KEY(email, nro, anomalia_id),
     FOREIGN KEY(email, nro) REFERENCES proposta_de_correcao(email, nro) ON DELETE CASCADE,
