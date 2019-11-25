@@ -18,9 +18,7 @@ RETURNS BOOLEAN
 AS
 $$
 BEGIN
-	IF qualificado = 1 AND EXISTS (SELECT email FROM utilizador_regular U WHERE U.email = emailAVerificar) THEN
-		return FALSE;
-	ELSIF qualificado = 0 AND EXISTS (SELECT email FROM utilizador_qualificado U WHERE U.email = emailAVerificar) THEN
+	IF (qualificado = 1 AND EXISTS (SELECT email FROM utilizador_regular U WHERE U.email = emailAVerificar)) OR (qualificado = 0 AND EXISTS (SELECT email FROM utilizador_qualificado U WHERE U.email = emailAVerificar)) THEN
 		return FALSE;
 	ELSE
 		return TRUE;
