@@ -4,7 +4,7 @@ INSERT INTO local_publico VALUES (42.112316,    -55.650346,     'Praca publica')
 INSERT INTO local_publico VALUES (78.081231,    -37.823458,     'Rua publica');
 INSERT INTO local_publico VALUES (-46.123129,   -53.496863,     'Estrada publica');
 INSERT INTO local_publico VALUES (40.232463,    128.521355,     'Predio publico');
-INSERT INTO local_publico VALUES (39.336775,    -8.936379,      'Rio Maior'); 
+INSERT INTO local_publico VALUES (39.336775,    -8.936379,      'Rio Maior');
 --Esta ultima nao deve ser mudada pois e necessaria para um dos exs de SQL
 
 --  item   --
@@ -22,8 +22,9 @@ INSERT INTO item VALUES(97666,  'descricaoItem6',    'localizacaoItem6',    39.3
 INSERT INTO anomalia VALUES(75739,  '(1.2,7.3,6.2,4.2)',    '\\xFFFA12EF',  'portugues',    ('2019-03-07 01:10:04'),    'descricaoAnomalia1',   FALSE);
 INSERT INTO anomalia VALUES(84433,  '(2.3,5.6,9.3,2.8)',    '\\x153123EF',  'ingles',       ('2019-04-02 04:02:06'),    'descricaoAnomalia2',   FALSE);
 INSERT INTO anomalia VALUES(48651,  '(4.1,9.2,6.1,1.5)',    '\\xDFF12EEF',  'portugues',    ('2019-05-07 20:51:02'),    'descricaoAnomalia3',   FALSE);
-INSERT INTO anomalia VALUES(57003,  '(2.5,9.3,5.0,6.4)',    '\\xDEAD1231',  'espanhol',     ('2019-08-16 21:38:03'),    'descricaoAnomalia4',   FALSE);
+INSERT INTO anomalia VALUES(57003,  '(2.5,9.3,5.0,6.4)',    '\\xDEAD1231',  'espanhol',     ('2018-08-16 21:38:03'),    'descricaoAnomalia4',   FALSE);
 INSERT INTO anomalia VALUES(90833,  '(3.7,8.1,9.1,3.6)',    '\\xDEA12BCA',  'italiano',     ('2019-09-24 22:29:01'),    'descricaoAnomalia5',   TRUE);
+INSERT INTO anomalia VALUES(10000,  '(0.3,3.1,2.3,1.8)',    '\\x63535299',  'espanhol',     ('2019-01-14 14:01:51'),    'descricaoAnomalia6',   TRUE);
 
  --  anomalia_traducao   --
 
@@ -83,6 +84,7 @@ INSERT INTO utilizador_regular VALUES('email_utilizador_regular_8@emailorg.com')
  --  incidencia   --
 
 INSERT INTO incidencia VALUES(75739,    42638,  'email_utilizador_qualificado_6@emailorg.com');
+INSERT INTO incidencia VALUES(10000,    48017,  'email_utilizador_qualificado_6@emailorg.com');
 INSERT INTO incidencia VALUES(84433,    48017,  'email_utilizador_regular_2@emailorg.com');
 INSERT INTO incidencia VALUES(48651,    63120,  'email_utilizador_regular_2@emailorg.com');
 INSERT INTO incidencia VALUES(57003,    39036,  'email_utilizador_regular_7@emailorg.com');

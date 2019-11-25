@@ -62,8 +62,7 @@ CREATE TABLE anomalia_traducao
     lingua2 	            VARCHAR(255)	NOT NULL,
     PRIMARY KEY(id),
     FOREIGN KEY(id) REFERENCES anomalia(id) ON DELETE CASCADE ON UPDATE CASCADE);
-    --CONSTRAINT chk_anomalia_traducao CHECK (zona2 <> (SELECT zona FROM anomalia WHERE id = pk_anomalia_traducao) AND lingua2 <> (SELECT lingua FROM anomalia WHERE id = pk_anomalia_traducao)));
-
+    
 CREATE TABLE duplicado
    (item1 	                INTEGER	        NOT NULL,
     item2 	                INTEGER	        NOT NULL,
