@@ -17,17 +17,20 @@ INSERT INTO item VALUES(23466,  'descricaoItem5',    'localizacaoItem5',    40.2
 INSERT INTO item VALUES(97666,  'descricaoItem6',    'localizacaoItem6',    39.336775,  -8.936379);
 
 --  anomalia   --
---No lugar da imagem, BYTEA, tem random hexadecimal stuff
-INSERT INTO anomalia VALUES(75739,  '((1.2,7.3),(6.2,7.3))',    '\\xFFFA12EF',  'portugues',    ('2019-03-07 01:10:04'),    'descricaoAnomalia1',   FALSE);
-INSERT INTO anomalia VALUES(84433,  '((2.3,5.6),(9.3,5.6))',    '\\x153123EF',  'ingles',       ('2019-04-02 04:02:06'),    'descricaoAnomalia2',   FALSE);
-INSERT INTO anomalia VALUES(48651,  '((4.1,9.2),(6.1,9.2))',    '\\xDFF12EEF',  'portugues',    ('2019-05-07 20:51:02'),    'descricaoAnomalia3',   FALSE);
-INSERT INTO anomalia VALUES(57003,  '((2.5,6.4),(5.0,6.4))',    '\\xDEAD1231',  'espanhol',     ('2019-08-16 21:38:03'),    'descricaoAnomalia4',   TRUE);
-INSERT INTO anomalia VALUES(90833,  '((3.7,8.1),(9.1,8.1))',    '\\xDEA12BCA',  'italiano',     ('2019-09-24 22:29:01'),    'descricaoAnomalia5',   TRUE);
+-- No lugar da imagem, BYTEA, tem random hexadecimal stuff
+-- Coordenadas formato (x1,y1,x2,y2)
+INSERT INTO anomalia VALUES(75739,  '(1.2,7.3,6.2,4.2)',    '\\xFFFA12EF',  'portugues',    ('2019-03-07 01:10:04'),    'descricaoAnomalia1',   FALSE);
+INSERT INTO anomalia VALUES(84433,  '(2.3,5.6,9.3,2.8)',    '\\x153123EF',  'ingles',       ('2019-04-02 04:02:06'),    'descricaoAnomalia2',   FALSE);
+INSERT INTO anomalia VALUES(48651,  '(4.1,9.2,6.1,1.5)',    '\\xDFF12EEF',  'portugues',    ('2019-05-07 20:51:02'),    'descricaoAnomalia3',   FALSE);
+INSERT INTO anomalia VALUES(57003,  '(2.5,9.3,5.0,6.4)',    '\\xDEAD1231',  'espanhol',     ('2019-08-16 21:38:03'),    'descricaoAnomalia4',   FALSE);
+INSERT INTO anomalia VALUES(90833,  '(3.7,8.1,9.1,3.6)',    '\\xDEA12BCA',  'italiano',     ('2019-09-24 22:29:01'),    'descricaoAnomalia5',   TRUE);
 
  --  anomalia_traducao   --
- 
-INSERT INTO anomalia_traducao VALUES(84433, '((6.3,10.2),(8.3,10.2))',  'portugues');
-INSERT INTO anomalia_traducao VALUES(48651, '((1.3,7.2),(3.3,7.2))',    'ingles');
+
+INSERT INTO anomalia_traducao VALUES(75739, '(0.5,3.5,7.1,1.5)',    'espanhol');
+INSERT INTO anomalia_traducao VALUES(84433, '(6.3,10.2,8.3,5.3)',   'portugues');
+INSERT INTO anomalia_traducao VALUES(48651, '(1.3,7.2,3.3,1.8)',    'ingles');
+INSERT INTO anomalia_traducao VALUES(57003, '(3.2,6.7,7.1,4.1)',    'ingles');
 
  --  duplicado   --
 
@@ -82,7 +85,7 @@ INSERT INTO utilizador_regular VALUES('email_utilizador_regular_8@emailorg.com')
 INSERT INTO incidencia VALUES(75739,    42638,  'email_utilizador_qualificado_6@emailorg.com');
 INSERT INTO incidencia VALUES(84433,    48017,  'email_utilizador_regular_2@emailorg.com');
 INSERT INTO incidencia VALUES(48651,    63120,  'email_utilizador_regular_2@emailorg.com');
-INSERT INTO incidencia VALUES(57003,    39036,  'email_utilizador_qualificado_7@emailorg.com');
+INSERT INTO incidencia VALUES(57003,    39036,  'email_utilizador_regular_7@emailorg.com');
 INSERT INTO incidencia VALUES(90833,    97666,  'email_utilizador_qualificado_8@emailorg.com');
 
  --  proposta_de_correcao   --

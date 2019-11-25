@@ -76,7 +76,7 @@ CREATE TABLE duplicado
 
 CREATE TABLE utilizador
    (email 	                VARCHAR(255)	NOT NULL,
-    passsword	            VARCHAR(255)    NOT NULL,
+    password	            VARCHAR(255)    NOT NULL,
     PRIMARY KEY(email),
     CHECK (email LIKE '%@%'));
 
