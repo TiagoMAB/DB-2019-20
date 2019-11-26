@@ -9,10 +9,10 @@ INSERT INTO local_publico VALUES (39.336775,    -8.936379,      'Rio Maior');
 
 --  item   --
 
-INSERT INTO item VALUES(42638,  'descricaoItem1',    'localizacaoItem1',    31.112316,  -55.650346);
-INSERT INTO item VALUES(48017,  'descricaoItem2',    'localizacaoItem2',    31.081231,  -37.823458);
+INSERT INTO item VALUES(42638,  'descricaoItem1',    'localizacaoItem1',    42.112316,  -55.650346);
+INSERT INTO item VALUES(48017,  'descricaoItem2',    'localizacaoItem2',    78.081231,  -37.823458);
 INSERT INTO item VALUES(63120,  'descricaoItem3',    'localizacaoItem3',    -46.123129, -53.496863);
-INSERT INTO item VALUES(39036,  'descricaoItem4',    'localizacaoItem4',    31.232463,  128.521355);
+INSERT INTO item VALUES(39036,  'descricaoItem4',    'localizacaoItem4',    40.232463,  128.521355);
 INSERT INTO item VALUES(23466,  'descricaoItem5',    'localizacaoItem5',    40.232463,  128.521355);
 INSERT INTO item VALUES(97666,  'descricaoItem6',    'localizacaoItem6',    39.336775,  -8.936379);
 
