@@ -9,10 +9,10 @@ INSERT INTO local_publico VALUES (39.336775,    -8.936379,      'Rio Maior');
 
 --  item   --
 
-INSERT INTO item VALUES(42638,  'descricaoItem1',    'localizacaoItem1',    42.112316,  -55.650346);
-INSERT INTO item VALUES(48017,  'descricaoItem2',    'localizacaoItem2',    78.081231,  -37.823458);
+INSERT INTO item VALUES(42638,  'descricaoItem1',    'localizacaoItem1',    31.112316,  -55.650346);
+INSERT INTO item VALUES(48017,  'descricaoItem2',    'localizacaoItem2',    31.081231,  -37.823458);
 INSERT INTO item VALUES(63120,  'descricaoItem3',    'localizacaoItem3',    -46.123129, -53.496863);
-INSERT INTO item VALUES(39036,  'descricaoItem4',    'localizacaoItem4',    40.232463,  128.521355);
+INSERT INTO item VALUES(39036,  'descricaoItem4',    'localizacaoItem4',    31.232463,  128.521355);
 INSERT INTO item VALUES(23466,  'descricaoItem5',    'localizacaoItem5',    40.232463,  128.521355);
 INSERT INTO item VALUES(97666,  'descricaoItem6',    'localizacaoItem6',    39.336775,  -8.936379);
 
@@ -84,9 +84,9 @@ INSERT INTO utilizador_regular VALUES('email_utilizador_regular_8@emailorg.com')
  --  incidencia   --
 
 INSERT INTO incidencia VALUES(75739,    42638,  'email_utilizador_qualificado_6@emailorg.com');
-INSERT INTO incidencia VALUES(10000,    48017,  'email_utilizador_qualificado_6@emailorg.com');
+INSERT INTO incidencia VALUES(10000,    48017,  'email_utilizador_qualificado_2@emailorg.com');
 INSERT INTO incidencia VALUES(84433,    48017,  'email_utilizador_regular_2@emailorg.com');
-INSERT INTO incidencia VALUES(48651,    63120,  'email_utilizador_regular_2@emailorg.com');
+INSERT INTO incidencia VALUES(48651,    63120,  'email_utilizador_qualificado_2@emailorg.com');
 INSERT INTO incidencia VALUES(57003,    39036,  'email_utilizador_regular_7@emailorg.com');
 INSERT INTO incidencia VALUES(90833,    97666,  'email_utilizador_qualificado_8@emailorg.com');
 
@@ -101,7 +101,7 @@ INSERT INTO proposta_de_correcao VALUES('email_utilizador_qualificado_5@emailorg
  --  correcao   --
 
 INSERT INTO correcao VALUES('email_utilizador_qualificado_1@emailorg.com',  1,  75739);
-INSERT INTO correcao VALUES('email_utilizador_qualificado_2@emailorg.com',  2,  84433);
-INSERT INTO correcao VALUES('email_utilizador_qualificado_3@emailorg.com',  3,  48651);
+INSERT INTO correcao VALUES('email_utilizador_qualificado_2@emailorg.com',  2,  48651);
+INSERT INTO correcao VALUES('email_utilizador_qualificado_3@emailorg.com',  3,  84433);
 INSERT INTO correcao VALUES('email_utilizador_qualificado_4@emailorg.com',  4,  57003);
 INSERT INTO correcao VALUES('email_utilizador_qualificado_5@emailorg.com',  5,  90833);

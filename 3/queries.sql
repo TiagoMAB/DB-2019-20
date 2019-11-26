@@ -40,3 +40,17 @@ WHERE NOT EXISTS (
 	 FROM item INNER JOIN incidencia ON item.id = incidencia.item_id
 	 WHERE email = I.email)
 );
+
+
+
+SELECT DISTINCT email
+FROM (incidencia NATURAL JOIN correcao) A
+WHERE EXISTS (
+	(SELECT anomalia_id
+	 FROM anomalia INNER JOIN incidencia ON anomalia.id = incidencia.anomalia_id INNER JOIN item ON incidencia.item_id = item.id
+	 WHERE email = A.email AND (item.latitude < (SELECT latitude FROM local_publico WHERE local_publico.nome = 'Rio Maior') AND DATE_PART('year', ts) = DATE_PART('year', CURRENT_DATE)))
+	EXCEPT
+	(SELECT correcao.anomalia_id
+	 FROM correcao INNER JOIN anomalia ON correcao.anomalia_id = anomalia.id INNER JOIN incidencia ON anomalia.id = incidencia.anomalia_id INNER JOIN item ON item.id = incidencia.item_id
+	 WHERE correcao.email = A.email)
+);
