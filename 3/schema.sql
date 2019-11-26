@@ -12,6 +12,7 @@ DROP TABLE IF EXISTS proposta_de_correcao CASCADE;
 DROP TABLE IF EXISTS correcao CASCADE;
 
 DROP FUNCTION IF EXISTS verificaUtilizador;
+DROP FUNCTION IF EXISTS verificaAnomalia;
 
 CREATE FUNCTION verificaUtilizador (emailAVerificar VARCHAR(255), qualificado INTEGER)
 RETURNS BOOLEAN
@@ -19,10 +20,34 @@ AS
 $$
 BEGIN
 	IF (qualificado = 1 AND EXISTS (SELECT email FROM utilizador_regular U WHERE U.email = emailAVerificar)) OR (qualificado = 0 AND EXISTS (SELECT email FROM utilizador_qualificado U WHERE U.email = emailAVerificar)) THEN
-		return FALSE;
+		RETURN FALSE;
 	ELSE
-		return TRUE;
+		RETURN TRUE;
 	END IF;
+END;
+$$
+LANGUAGE plpgsql;
+
+CREATE FUNCTION verificaAnomalia (id2 INTEGER, zona2 BOX, lingua2 VARCHAR(255))
+RETURNS BOOLEAN
+AS
+$$
+DECLARE z1p1 POINT;
+DECLARE z1p2 POINT;
+DECLARE z2p1 POINT;
+DECLARE z2p2 POINT;
+BEGIN
+    SELECT zona[0] INTO z1p1 FROM anomalia WHERE id2 = id;
+    SELECT zona[1] INTO z1p2 FROM anomalia WHERE id2 = id;
+	SELECT zona2[0] INTO z2p1;
+	SELECT zona2[1] INTO z2p2;
+
+    IF ((z1p1[0] < z2p2[0] OR z2p1[0] < z1p2[0] OR z1p2[1] > z2p1[1] OR z2p2[1] > z1p1[1]) AND
+         lingua2 <> (SELECT lingua FROM anomalia WHERE id2 = id)) THEN
+        RETURN TRUE;
+    ELSE
+        RETURN FALSE;
+    END IF;
 END;
 $$
 LANGUAGE plpgsql;
@@ -61,7 +86,8 @@ CREATE TABLE anomalia_traducao
     zona2	                BOX         	NOT NULL,
     lingua2 	            VARCHAR(255)	NOT NULL,
     PRIMARY KEY(id),
-    FOREIGN KEY(id) REFERENCES anomalia(id) ON DELETE CASCADE ON UPDATE CASCADE);
+    FOREIGN KEY(id) REFERENCES anomalia(id) ON DELETE CASCADE ON UPDATE CASCADE,
+    CHECK (verificaAnomalia(id, zona2, lingua2) = TRUE));
     
 CREATE TABLE duplicado
    (item1 	                INTEGER	        NOT NULL,
