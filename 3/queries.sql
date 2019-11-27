@@ -34,11 +34,11 @@ FROM (item INNER JOIN incidencia ON item.id = incidencia.item_id) I
 WHERE NOT EXISTS (
 	(SELECT local_publico.latitude, local_publico.longitude
 	 FROM anomalia INNER JOIN incidencia ON anomalia.id = anomalia_id INNER JOIN item ON item.id = item_id RIGHT OUTER JOIN local_publico ON item.latitude = local_publico.latitude AND item.longitude = local_publico.longitude
-	 WHERE (local_publico.latitude > (SELECT latitude FROM local_publico WHERE local_publico.nome = 'Rio Maior') AND (ts IS NULL OR ts >= '2019-01-01 00:00:00' AND ts <= '2019-12-31 23:59:59')))
+	 WHERE (local_publico.latitude > (SELECT latitude FROM local_publico WHERE local_publico.nome = 'Rio Maior')))
 	EXCEPT
 	(SELECT latitude, longitude
-	 FROM item INNER JOIN incidencia ON item.id = incidencia.item_id
-	 WHERE email = I.email)
+	 FROM item INNER JOIN incidencia ON item.id = incidencia.item_id INNER JOIN anomalia ON anomalia.id = anomalia_id
+	 WHERE email = I.email AND (ts IS NULL OR DATE_PART('year', ts) = 2019))
 );
 
 

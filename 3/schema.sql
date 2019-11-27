@@ -67,9 +67,7 @@ CREATE TABLE item
     latitude 	            FLOAT	        NOT NULL,
     longitude 	            FLOAT	        NOT NULL,
     PRIMARY KEY(id),
-    FOREIGN KEY(latitude, longitude) REFERENCES local_publico(latitude, longitude) ON DELETE CASCADE,
-    CHECK (latitude <= 90 AND latitude >= -90),
-    CHECK (longitude <= 180 AND latitude >= -180));
+    FOREIGN KEY(latitude, longitude) REFERENCES local_publico(latitude, longitude) ON DELETE CASCADE);
 
 CREATE TABLE anomalia
    (id 	                    INTEGER	        NOT NULL,
@@ -100,21 +98,18 @@ CREATE TABLE duplicado
 CREATE TABLE utilizador
    (email 	                VARCHAR(255)	NOT NULL,
     password	            VARCHAR(255)    NOT NULL,
-    PRIMARY KEY(email),
-    CHECK (email LIKE '%@%'));
+    PRIMARY KEY(email));
 
 CREATE TABLE utilizador_qualificado
    (email 	                VARCHAR(255)	NOT NULL,
     PRIMARY KEY(email),
     FOREIGN KEY(email) REFERENCES utilizador(email) ON DELETE CASCADE,
-    CHECK (email LIKE '%@%'),
     CHECK (verificaUtilizador(email, 1) = TRUE));
 
 CREATE TABLE utilizador_regular
    (email 	                VARCHAR(255)	NOT NULL,
     PRIMARY KEY(email),
     FOREIGN KEY(email) REFERENCES utilizador(email) ON DELETE CASCADE,
-    CHECK (email LIKE '%@%'),
     CHECK (verificaUtilizador(email, 0) = TRUE));
 
 CREATE TABLE incidencia
@@ -124,8 +119,7 @@ CREATE TABLE incidencia
     PRIMARY KEY(anomalia_id),
     FOREIGN KEY(anomalia_id) REFERENCES anomalia(id) ON DELETE CASCADE ON UPDATE CASCADE,
     FOREIGN KEY(item_id) REFERENCES item(id) ON DELETE CASCADE ON UPDATE CASCADE,
-    FOREIGN KEY(email) REFERENCES utilizador(email) ON DELETE CASCADE,
-    CHECK (email LIKE '%@%'));
+    FOREIGN KEY(email) REFERENCES utilizador(email) ON DELETE CASCADE);
 
 CREATE TABLE proposta_de_correcao
    (email 	                VARCHAR(255)	NOT NULL,
@@ -133,8 +127,7 @@ CREATE TABLE proposta_de_correcao
     data_hora 	            TIMESTAMP	    NOT NULL,
     texto 	                VARCHAR(255)	NOT NULL,
     PRIMARY KEY(email, nro),
-    FOREIGN KEY(email) REFERENCES utilizador_qualificado(email) ON DELETE CASCADE,
-    CHECK (email LIKE '%@%'));
+    FOREIGN KEY(email) REFERENCES utilizador_qualificado(email) ON DELETE CASCADE);
 
 CREATE TABLE correcao
    (email 	                VARCHAR(255)	NOT NULL,
@@ -142,5 +135,4 @@ CREATE TABLE correcao
     anomalia_id             INTEGER         NOT NULL,
     PRIMARY KEY(email, nro, anomalia_id),
     FOREIGN KEY(email, nro) REFERENCES proposta_de_correcao(email, nro) ON DELETE CASCADE,
-    FOREIGN KEY (anomalia_id) REFERENCES incidencia(anomalia_id) ON DELETE CASCADE ON UPDATE CASCADE,
-    CHECK (email LIKE '%@%'));
+    FOREIGN KEY (anomalia_id) REFERENCES incidencia(anomalia_id) ON DELETE CASCADE ON UPDATE CASCADE);
