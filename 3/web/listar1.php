@@ -5,8 +5,6 @@
         <?php
         try
         {
-            $first = $_REQUEST['first'];
-            $second = $_REQUEST['second'];
 
             include "settings.php";
 
