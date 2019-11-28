@@ -1,7 +1,7 @@
 <?php
     $host = "127.0.0.1";
     $user ="postgres";
-    $password = "xx";
+    $password = "xxx";
     $dbname = "E3";
 
     $db = new PDO("pgsql:host=$host;dbname=$dbname", $user, $password);
