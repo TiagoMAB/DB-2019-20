@@ -10,9 +10,6 @@
 
             include "settings.php";
 
-            $db = new PDO("pgsql:host=$host;dbname=$dbname", $user, $password);
-            $db->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
-
             $sql = "SELECT nome, latitude, longitude FROM local_publico;";
             $result = $db->prepare($sql);
             $result->execute();
