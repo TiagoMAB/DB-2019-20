@@ -1,21 +1,16 @@
 <html>
     <body>
         <?php
-            $id = $_REQUEST['id'];
-            $descricao = $_REQUEST['descricao'];
-            $localizacao = $_REQUEST['localizacao'];
-            $latitude = $_REQUEST['latitude'];
-            $longitude = $_REQUEST['longitude'];
             try
             {
-                $host = "127.0.0.1";
-                $user ="postgres";
-                $password = "xxx";
-                $dbname = "E3";
+                include "settings.php";
 
-                $db = new PDO("pgsql:host=$host;dbname=$dbname", $user, $password);
-                $db->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
-
+                $id = $_REQUEST['id'];
+                $descricao = $_REQUEST['descricao'];
+                $localizacao = $_REQUEST['localizacao'];
+                $latitude = $_REQUEST['latitude'];
+                $longitude = $_REQUEST['longitude'];
+                
                 $sql = "INSERT INTO item VALUES (:id, :descricao, :localizacao, :latitude, :longitude) ";
                 
                 echo("<p>$sql</p>");

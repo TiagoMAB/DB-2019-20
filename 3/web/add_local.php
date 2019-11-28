@@ -1,19 +1,14 @@
 <html>
     <body>
         <?php
-            $nome = $_REQUEST['nome'];
-            $latitude = $_REQUEST['latitude'];
-            $longitude = $_REQUEST['longitude'];
             try
             {
-                $host = "127.0.0.1";
-                $user ="postgres";
-                $password = "xxx";
-                $dbname = "E3";
+                include "settings.php";
 
-                $db = new PDO("pgsql:host=$host;dbname=$dbname", $user, $password);
-                $db->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
-
+                $nome = $_REQUEST['nome'];
+                $latitude = $_REQUEST['latitude'];
+                $longitude = $_REQUEST['longitude'];
+                
                 $sql = "INSERT INTO local_publico VALUES (:latitude, :longitude, :nome) ";
                 
                 echo("<p>$sql</p>");
