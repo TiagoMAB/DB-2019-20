@@ -11,6 +11,7 @@ DROP TABLE IF EXISTS proposta_de_correcao CASCADE;
 DROP TABLE IF EXISTS correcao CASCADE;
 
 DROP FUNCTION IF EXISTS verificaUtilizador;
+DROP FUNCTION IF EXISTS verificaAnomalia;
 
 CREATE FUNCTION verificaUtilizador (emailAVerificar VARCHAR(255), qualificado INTEGER)
 RETURNS BOOLEAN
@@ -18,10 +19,34 @@ AS
 $$
 BEGIN
 	IF (qualificado = 1 AND EXISTS (SELECT email FROM utilizador_regular U WHERE U.email = emailAVerificar)) OR (qualificado = 0 AND EXISTS (SELECT email FROM utilizador_qualificado U WHERE U.email = emailAVerificar)) THEN
-		return FALSE;
+		RETURN FALSE;
 	ELSE
-		return TRUE;
+		RETURN TRUE;
 	END IF;
+END;
+$$
+LANGUAGE plpgsql;
+
+CREATE FUNCTION verificaAnomalia (id2 INTEGER, zona2 BOX, lingua2 VARCHAR(255))
+RETURNS BOOLEAN
+AS
+$$
+DECLARE z1p1 POINT;
+DECLARE z1p2 POINT;
+DECLARE z2p1 POINT;
+DECLARE z2p2 POINT;
+BEGIN
+    SELECT zona[0] INTO z1p1 FROM anomalia WHERE id2 = id;
+    SELECT zona[1] INTO z1p2 FROM anomalia WHERE id2 = id;
+	SELECT zona2[0] INTO z2p1;
+	SELECT zona2[1] INTO z2p2;
+
+    IF ((z1p1[0] < z2p2[0] OR z2p1[0] < z1p2[0] OR z1p2[1] > z2p1[1] OR z2p2[1] > z1p1[1]) AND
+         lingua2 <> (SELECT lingua FROM anomalia WHERE id2 = id)) THEN
+        RETURN TRUE;
+    ELSE
+        RETURN FALSE;
+    END IF;
 END;
 $$
 LANGUAGE plpgsql;
@@ -41,9 +66,7 @@ CREATE TABLE item
     latitude 	            FLOAT	        NOT NULL,
     longitude 	            FLOAT	        NOT NULL,
     PRIMARY KEY(id),
-    FOREIGN KEY(latitude, longitude) REFERENCES local_publico(latitude, longitude) ON DELETE CASCADE,
-    CHECK (latitude <= 90 AND latitude >= -90),
-    CHECK (longitude <= 180 AND latitude >= -180));
+    FOREIGN KEY(latitude, longitude) REFERENCES local_publico(latitude, longitude) ON DELETE CASCADE);
 
 CREATE TABLE anomalia
    (id 	                    INTEGER	        NOT NULL,
@@ -60,9 +83,9 @@ CREATE TABLE anomalia_traducao
     zona2	                BOX         	NOT NULL,
     lingua2 	            VARCHAR(255)	NOT NULL,
     PRIMARY KEY(id),
-    FOREIGN KEY(id) REFERENCES anomalia(id) ON DELETE CASCADE ON UPDATE CASCADE);
-    --CONSTRAINT chk_anomalia_traducao CHECK (zona2 <> (SELECT zona FROM anomalia WHERE id = pk_anomalia_traducao) AND lingua2 <> (SELECT lingua FROM anomalia WHERE id = pk_anomalia_traducao)));
-
+    FOREIGN KEY(id) REFERENCES anomalia(id) ON DELETE CASCADE ON UPDATE CASCADE,
+    CHECK (verificaAnomalia(id, zona2, lingua2) = TRUE));
+    
 CREATE TABLE duplicado
    (item1 	                INTEGER	        NOT NULL,
     item2 	                INTEGER	        NOT NULL,
@@ -74,21 +97,18 @@ CREATE TABLE duplicado
 CREATE TABLE utilizador
    (email 	                VARCHAR(255)	NOT NULL,
     password	            VARCHAR(255)    NOT NULL,
-    PRIMARY KEY(email),
-    CHECK (email LIKE '%@%'));
+    PRIMARY KEY(email));
 
 CREATE TABLE utilizador_qualificado
    (email 	                VARCHAR(255)	NOT NULL,
     PRIMARY KEY(email),
     FOREIGN KEY(email) REFERENCES utilizador(email) ON DELETE CASCADE,
-    CHECK (email LIKE '%@%'),
     CHECK (verificaUtilizador(email, 1) = TRUE));
 
 CREATE TABLE utilizador_regular
    (email 	                VARCHAR(255)	NOT NULL,
     PRIMARY KEY(email),
     FOREIGN KEY(email) REFERENCES utilizador(email) ON DELETE CASCADE,
-    CHECK (email LIKE '%@%'),
     CHECK (verificaUtilizador(email, 0) = TRUE));
 
 CREATE TABLE incidencia
@@ -98,8 +118,7 @@ CREATE TABLE incidencia
     PRIMARY KEY(anomalia_id),
     FOREIGN KEY(anomalia_id) REFERENCES anomalia(id) ON DELETE CASCADE ON UPDATE CASCADE,
     FOREIGN KEY(item_id) REFERENCES item(id) ON DELETE CASCADE ON UPDATE CASCADE,
-    FOREIGN KEY(email) REFERENCES utilizador(email) ON DELETE CASCADE,
-    CHECK (email LIKE '%@%'));
+    FOREIGN KEY(email) REFERENCES utilizador(email) ON DELETE CASCADE);
 
 CREATE TABLE proposta_de_correcao
    (email 	                VARCHAR(255)	NOT NULL,
@@ -107,8 +126,7 @@ CREATE TABLE proposta_de_correcao
     data_hora 	            TIMESTAMP	    NOT NULL,
     texto 	                VARCHAR(255)	NOT NULL,
     PRIMARY KEY(email, nro),
-    FOREIGN KEY(email) REFERENCES utilizador_qualificado(email) ON DELETE CASCADE,
-    CHECK (email LIKE '%@%'));
+    FOREIGN KEY(email) REFERENCES utilizador_qualificado(email) ON DELETE CASCADE);
 
 CREATE TABLE correcao
    (email 	                VARCHAR(255)	NOT NULL,
@@ -116,5 +134,4 @@ CREATE TABLE correcao
     anomalia_id             INTEGER         NOT NULL,
     PRIMARY KEY(email, nro, anomalia_id),
     FOREIGN KEY(email, nro) REFERENCES proposta_de_correcao(email, nro) ON DELETE CASCADE,
-    FOREIGN KEY (anomalia_id) REFERENCES incidencia(anomalia_id) ON DELETE CASCADE ON UPDATE CASCADE,
-    CHECK (email LIKE '%@%'));
+    FOREIGN KEY (anomalia_id) REFERENCES incidencia(anomalia_id) ON DELETE CASCADE ON UPDATE CASCADE);
