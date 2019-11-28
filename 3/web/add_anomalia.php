@@ -5,7 +5,7 @@
             $lingua = $_REQUEST['lingua'];
             $imagem = $_REQUEST['imagem'];
             $descricao = $_REQUEST['descricao'];
-            $redacao = $_REQUEST['redacao'] ? true : false;
+            $redacao = $_REQUEST['redacao'];
             if ($redacao == null) {
                 $redacao = 0;
             }

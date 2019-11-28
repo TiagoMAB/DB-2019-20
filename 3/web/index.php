@@ -1,17 +1,30 @@
-<html>
-    <body>
-        <h3>Bem-vindo! Selecione a sua operação</h3>
- 
-        <td><a href="account.php">Listar Utilizadores</a></td><br>
-        <td><a href="local.php">Inserir ou remover locais</a></td><br>
-        <td><a href="item.php">Inserir ou remover itens</a></td><br>
-        <td><a href="anomalia.php">Inserir ou remover anomalias</a></td><br>
-        <td><a href="correcao.php">Inserir, editar e remover correcções e propostas de correcção</a></td><br>
-        <td><a href="incidencia.php">Registar incidências</a></td><br>
-        <td><a href="duplicado.php">Registar duplicado</a></td><br>
-        <td><a href="listar1.php">Listar anomalias de incidências registadas na área compreendida entre dois locais públicos</a></td><br>
-        <td><a href="listar2.php">listar todas as anomalias registadas nos últimos três meses a mais ou menos (dX, dY) graus de (latitude, longitude)</a></td><br>
+<!DOCTYPE html>
+<html lang="pt">
+    <head>
+        <title>Bootstrap Example</title>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/css/bootstrap.min.css">
+    </head>
 
-              
+    <body>
+        <ul class="nav nav-tabs">
+            <li role="presentation" class="active"><a href="#">Início</a></li>
+            <li role="presentation"><a href="utilizador.php">Utilizadores</a></li>
+            <li role="presentation"><a href="local.php">Locais</a></li>
+            <li role="presentation"><a href="item.php">Itens</a></li>
+            <li role="presentation"><a href="anomalia.php">Anomalias</a></li>
+            <li role="presentation"><a href="correcao.php">Correções e Propostas de Correção</a></li>
+            <li role="presentation"><a href="local.php">Incidências</a></li>
+            <li role="presentation"><a href="duplicado.php">Duplicados</a></li>
+            <li role="presentation"><a href="listar.php">Listar</a></li>
+        </ul>
+
+        <div class="jumbotron text-center">
+            <h1>Entrega 3</h1>
+            <p>Selecione uma operaçao</p> 
+        </div>  
     </body>
 </html>
+
+

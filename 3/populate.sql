@@ -58,7 +58,22 @@ INSERT INTO utilizador VALUES('email_utilizador_regular_5@emailorg.com',    'pas
 INSERT INTO utilizador VALUES('email_utilizador_regular_6@emailorg.com',    'password_utilizador_regular_6');
 INSERT INTO utilizador VALUES('email_utilizador_regular_7@emailorg.com',    'password_utilizador_regular_7');
 INSERT INTO utilizador VALUES('email_utilizador_regular_8@emailorg.com',    'password_utilizador_regular_8');
-
+INSERT INTO utilizador VALUES('email_utilizador_qualificado_11@emailorg.com',    'password_utilizador_regular_8');
+INSERT INTO utilizador VALUES('email_utilizador_qualificado_12@emailorg.com',    'password_utilizador_regular_8');
+INSERT INTO utilizador VALUES('email_utilizador_qualificado_13@emailorg.com',    'password_utilizador_regular_8');
+INSERT INTO utilizador VALUES('email_utilizador_qualificado_14@emailorg.com',    'password_utilizador_regular_8');
+INSERT INTO utilizador VALUES('email_utilizador_qualificado_15@emailorg.com',    'password_utilizador_regular_8');
+INSERT INTO utilizador VALUES('email_utilizador_qualificado_16@emailorg.com',    'password_utilizador_regular_8');
+INSERT INTO utilizador VALUES('email_utilizador_qualificado_17@emailorg.com',    'password_utilizador_regular_8');
+INSERT INTO utilizador VALUES('email_utilizador_qualificado_18@emailorg.com',    'password_utilizador_regular_8');
+INSERT INTO utilizador VALUES('email_utilizador_qualificado_21@emailorg.com',    'password_utilizador_regular_8');
+INSERT INTO utilizador VALUES('email_utilizador_qualificado_22@emailorg.com',    'password_utilizador_regular_8');
+INSERT INTO utilizador VALUES('email_utilizador_qualificado_23@emailorg.com',    'password_utilizador_regular_8');
+INSERT INTO utilizador VALUES('email_utilizador_qualificado_24@emailorg.com',    'password_utilizador_regular_8');
+INSERT INTO utilizador VALUES('email_utilizador_qualificado_25@emailorg.com',    'password_utilizador_regular_8');
+INSERT INTO utilizador VALUES('email_utilizador_qualificado_26@emailorg.com',    'password_utilizador_regular_8');
+INSERT INTO utilizador VALUES('email_utilizador_qualificado_27@emailorg.com',    'password_utilizador_regular_8');
+INSERT INTO utilizador VALUES('email_utilizador_qualificado_28@emailorg.com',    'password_utilizador_regular_8');
  --  utilizador_qualificado   --
 
 INSERT INTO utilizador_qualificado VALUES('email_utilizador_qualificado_1@emailorg.com');
@@ -69,6 +84,22 @@ INSERT INTO utilizador_qualificado VALUES('email_utilizador_qualificado_5@emailo
 INSERT INTO utilizador_qualificado VALUES('email_utilizador_qualificado_6@emailorg.com');
 INSERT INTO utilizador_qualificado VALUES('email_utilizador_qualificado_7@emailorg.com');
 INSERT INTO utilizador_qualificado VALUES('email_utilizador_qualificado_8@emailorg.com');
+INSERT INTO utilizador_qualificado VALUES('email_utilizador_qualificado_11@emailorg.com');
+INSERT INTO utilizador_qualificado VALUES('email_utilizador_qualificado_12@emailorg.com');
+INSERT INTO utilizador_qualificado VALUES('email_utilizador_qualificado_13@emailorg.com');
+INSERT INTO utilizador_qualificado VALUES('email_utilizador_qualificado_14@emailorg.com');
+INSERT INTO utilizador_qualificado VALUES('email_utilizador_qualificado_15@emailorg.com');
+INSERT INTO utilizador_qualificado VALUES('email_utilizador_qualificado_16@emailorg.com');
+INSERT INTO utilizador_qualificado VALUES('email_utilizador_qualificado_17@emailorg.com');
+INSERT INTO utilizador_qualificado VALUES('email_utilizador_qualificado_18@emailorg.com');
+INSERT INTO utilizador_qualificado VALUES('email_utilizador_qualificado_21@emailorg.com');
+INSERT INTO utilizador_qualificado VALUES('email_utilizador_qualificado_22@emailorg.com');
+INSERT INTO utilizador_qualificado VALUES('email_utilizador_qualificado_23@emailorg.com');
+INSERT INTO utilizador_qualificado VALUES('email_utilizador_qualificado_24@emailorg.com');
+INSERT INTO utilizador_qualificado VALUES('email_utilizador_qualificado_25@emailorg.com');
+INSERT INTO utilizador_qualificado VALUES('email_utilizador_qualificado_26@emailorg.com');
+INSERT INTO utilizador_qualificado VALUES('email_utilizador_qualificado_27@emailorg.com');
+INSERT INTO utilizador_qualificado VALUES('email_utilizador_qualificado_28@emailorg.com');
 
  --  utilizador_regular   --
 
