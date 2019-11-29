@@ -124,15 +124,15 @@ INSERT INTO incidencia VALUES(90833,    97666,  'email_utilizador_qualificado_8@
  --  proposta_de_correcao   --
 
 INSERT INTO proposta_de_correcao VALUES('email_utilizador_qualificado_1@emailorg.com',  1,  ('2019-03-07 01:10:04'),    'texto1');
-INSERT INTO proposta_de_correcao VALUES('email_utilizador_qualificado_2@emailorg.com',  2,  ('2019-04-02 04:02:06'),    'texto2');
-INSERT INTO proposta_de_correcao VALUES('email_utilizador_qualificado_3@emailorg.com',  3,  ('2019-05-07 20:51:02'),    'texto3');
-INSERT INTO proposta_de_correcao VALUES('email_utilizador_qualificado_4@emailorg.com',  4,  ('2019-08-16 21:38:03'),    'texto4');
-INSERT INTO proposta_de_correcao VALUES('email_utilizador_qualificado_5@emailorg.com',  5,  ('2019-09-24 22:29:01'),    'texto5');
+INSERT INTO proposta_de_correcao VALUES('email_utilizador_qualificado_2@emailorg.com',  1,  ('2019-04-02 04:02:06'),    'texto2');
+INSERT INTO proposta_de_correcao VALUES('email_utilizador_qualificado_3@emailorg.com',  1,  ('2019-05-07 20:51:02'),    'texto3');
+INSERT INTO proposta_de_correcao VALUES('email_utilizador_qualificado_4@emailorg.com',  1,  ('2019-08-16 21:38:03'),    'texto4');
+INSERT INTO proposta_de_correcao VALUES('email_utilizador_qualificado_5@emailorg.com',  1,  ('2019-09-24 22:29:01'),    'texto5');
 
  --  correcao   --
 
 INSERT INTO correcao VALUES('email_utilizador_qualificado_1@emailorg.com',  1,  75739);
-INSERT INTO correcao VALUES('email_utilizador_qualificado_2@emailorg.com',  2,  48651);
-INSERT INTO correcao VALUES('email_utilizador_qualificado_3@emailorg.com',  3,  84433);
-INSERT INTO correcao VALUES('email_utilizador_qualificado_4@emailorg.com',  4,  57003);
-INSERT INTO correcao VALUES('email_utilizador_qualificado_5@emailorg.com',  5,  90833);
+INSERT INTO correcao VALUES('email_utilizador_qualificado_2@emailorg.com',  1,  48651);
+INSERT INTO correcao VALUES('email_utilizador_qualificado_3@emailorg.com',  1,  84433);
+INSERT INTO correcao VALUES('email_utilizador_qualificado_4@emailorg.com',  1,  57003);
+INSERT INTO correcao VALUES('email_utilizador_qualificado_5@emailorg.com',  1,  90833);

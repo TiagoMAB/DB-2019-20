@@ -92,7 +92,7 @@
                 $table = $table . "</tbody></table>";
 
                 if (!$i) {
-                    echo("<div class=\"alert alert-danger col-md-4 col-md-offset-4 text-center alert-dismissible fade in\" role=\"alert\"><h4>Não há anomalias registadas entre estes 2 locais</h4></div>");
+                    echo("<div class=\"alert alert-danger col-md-4 col-md-offset-4 text-center alert-dismissible fade in\" role=\"alert\"><h4>Não há anomalias registadas nos ultimos três meses nesta área</h4></div>");
                 }
                 else {
                     echo($table);
