@@ -20,7 +20,13 @@
         </ul>
 
         <div class="jumbotron text-center">
-            <h1>Selecione uma opção</h1> 
+            <h1>Listar</h1> 
+            <p>
+              <a href="/listar1.php" class="btn btn-primary my-2">Listar todas as anomalias de incidências registadas na área compreendida entre dois locais públicos </a>
+            </p>
+            <p>
+              <a href="/listar2.php" class="btn btn-primary my-2">Dados (X,Y) com (latitude, longitude) em graus expressos em notação decimal, listar todas as anomalias registadas nos últimos três meses a mais ou menos (dX, dY) graus de (latitude, longitude)</a>
+            </p>
         </div>  
     </body>
 </html>

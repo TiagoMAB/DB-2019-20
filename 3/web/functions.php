@@ -58,6 +58,26 @@ function emails() {
     return $options;
 }
 
+function emails_qualificados() {
+
+    include "settings.php";
+
+    $sql = "SELECT email FROM utilizador_qualificado";
+    $result = $db->prepare($sql);
+    $result->execute();
+    
+    
+    $options = "";
+    $i = 0;
+    foreach($result as $row)
+    {
+        $i += 1;
+        $options = $options . "<option value=\"{$row['email']}\"> {$i} - {$row['email']} </option>\n";
+    }
+
+    return $options;
+}
+
 function anomalias() {
 
     include "settings.php";
@@ -81,7 +101,7 @@ function todas_anomalias() {
 
     include "settings.php";
     
-    $sql = "SELECT id FROM anomalia";
+    $sql = "SELECT anomalia_id AS id FROM incidencia";
     $result = $db->prepare($sql);
     $result->execute();
     

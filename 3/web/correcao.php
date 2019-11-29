@@ -25,7 +25,7 @@
         try {
             include "functions.php"; 
             
-            $emails = emails();
+            $emails = emails_qualificados();
             $anomalias = todas_anomalias(); 
             $texto = $_REQUEST['texto'];
             $flag = $_REQUEST['flag'];
