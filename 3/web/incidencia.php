@@ -1,91 +1,127 @@
 <html>
+    <head>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <link rel="stylesheet" href="css/file.css">
+    </head>
     <body>
-    <h3>Registar incidências</h3>
-        <p>Selecione a anomalia </p>
-        <?php
+        <ul class="nav nav-tabs">
+            <li role="presentation"><a href="index.php">Início</a></li>
+            <li role="presentation"><a href="utilizador.php">Utilizadores</a></li>
+            <li role="presentation"><a href="local.php">Locais</a></li>
+            <li role="presentation"><a href="item.php">Itens</a></li>
+            <li role="presentation"><a href="anomalia.php">Anomalias</a></li>
+            <li role="presentation"><a href="correcao.php">Correções e Propostas de Correção</a></li>
+            <li role="presentation" class="active"><a href="incidencia.php">Incidências</a></li>
+            <li role="presentation"><a href="duplicado.php">Duplicados</a></li>
+            <li role="presentation"><a href="listar.php">Listar</a></li>
+        </ul>
+        
+        <div class="jumbotron text-center">
+            <h1>Incidências</h1>
+        </div>  
+
+        <?php 
+        try {
+
+            include "settings.php";
+            include "functions.php"; 
+            
+            $anomalia = $_REQUEST['anomalia'];
+            $item = $_REQUEST['item'];
+            $email = $_REQUEST['email'];
+
+            if ($anomalia && $item && $email) {
+                $sql = "INSERT INTO incidencia VALUES (:anomalia, :item, :email) ";
+
+                $result = $db->prepare($sql);
+                $result->execute([':anomalia' => $anomalia, ':item' => $item, ':email' => $email]);
+
+                $db = null;
+                header("Location: /incidencia.php");
+                exit();
+            }
+            
+            $anomalias = anomalias();  
+            $itens = itens();
+            $emails = emails();
+        }
+        catch (PDOException $e)
+        {
+            echo("<div class=\"alert alert-danger col-md-4 col-md-offset-4 alert-dismissible fade in\" role=\"alert\"><h4>ERROR: {$e->getMessage()}</h4>
+            <a href=\"incidencia.php\" type=\"button\" class=\"btn btn-danger\">Reload</a></div>");
+        }
+
+        if ($anomalias != "") {
+            echo("<form class=\"container\" action=\"incidencia.php\" method=\"post\">
+                <div class=\"form-group\">
+                    <label for=\"nome\">Anomalia</label>
+                    <select type=\"text\" class=\"form-control\" name=\"anomalia\" .\" required=\"required\">{$anomalias}?></select>
+                </div>
+                <div class=\"form-group\">
+                    <label for=\"nome\">Item</label>
+                    <select type=\"text\" class=\"form-control\" name=\"item\" .\" required=\"required\">{$itens}</select>
+                </div>
+                <div class=\"form-group\">
+                    <label for=\"nome\">Email</label>
+                    <select type=\"text\" class=\"form-control\" name=\"email\" .\" required=\"required\">{$emails}</select>
+                </div>
+                <button type=\"submit\" class=\"btn btn-success\">Registar Incidência</button>
+            </form>
+            <br>");
+        }
+        else {
+            echo("<div class=\"alert alert-danger col-md-4 col-md-offset-4 text-center alert-dismissible fade in\" role=\"alert\"><h4>Não há anomalias para registar incidências</h4></div>");
+        }
+
         try
         {
             include "settings.php";
 
-            $sql = "SELECT id FROM anomalia EXCEPT (SELECT anomalia_id AS id FROM incidencia)";
-            $result = $db->prepare($sql);
-            $result->execute();
+            $anomalia = $_REQUEST['anomalia'];
+            $item = $_REQUEST['item'];
+            $email = $_REQUEST['email'];
 
-            $options = "";
-            $i = 0;
-            foreach($result as $row)
-            {
-                $i += 1;
-                $options = $options . "<option value=\"{$row['id']}\"> {$i} - {$row['id']} </option>\n";
-            }
-
-            if ($options == "") {
-                echo("<p>Não há anomalias para registar incidências");
-            }
-            else {
-                echo("<form action=\"incidencia_process.php\" method=\"post\"><table border=\"0\" cellspacing=\"5\">");
-
-                echo("<select name=\"anomalia\">{$options}</select><br>");
-                
-                $sql = "SELECT id FROM item";
+            if ($anomalia && $item && $email) {
+                $sql = "INSERT INTO incidencia VALUES (:anomalia, :item, :email) ";
+    
                 $result = $db->prepare($sql);
-                $result->execute();
-
-                
-                $options = "";
-                $i = 0;
-                foreach($result as $row)
-                {
-                    $i += 1;
-                    $options = $options . "<option value=\"{$row['id']}\"> {$i} - {$row['id']} </option>\n";
-                }
-                
-                echo(" <p>Selecione o item </p>");
-                echo("<select name=\"item\">{$options}</select><br>");
-                
-                $sql = "SELECT email FROM utilizador";
-                $result = $db->prepare($sql);
-                $result->execute();
-
-                
-                $options = "";
-                $i = 0;
-                foreach($result as $row)
-                {
-                    $i += 1;
-                    $options = $options . "<option value=\"{$row['email']}\"> {$i} - {$row['email']} </option>\n";
-                }
-                
-                echo(" <p>Selecione o email </p>");
-                echo("<select name=\"email\">{$options}</select><br><br>");
-
-                echo("<input type=\"submit\" value=\"Registar\"></form>");
+                $result->execute([':anomalia' => $anomalia, ':item' => $item, ':email' => $email]);
+    
+                $db = null;
+                header("Location: /incidencia.php");
+                exit();
             }
 
             $sql = "SELECT * FROM incidencia;";
             $result = $db->prepare($sql);
             $result->execute();
-
-            echo("<table border=\"0\" cellspacing=\"5\">\n");
+            
+            $table = "";
+            $table = $table . "<table class=\"table table-hover \"><thead><tr><th>#</th><th>Anomalia ID</th><th>Item ID</th><th>Email</th></tr></thead><tbody>";
+            
             $i = 0;
             foreach($result as $row)
             {
                 $i += 1;
-                echo("<tr>\n");
-                echo("<td>{$i}</td>\n");
-                echo("<td>{$row['anomalia_id']}</td>\n");
-                echo("<td>{$row['item_id']}</td>\n");
-                echo("<td>{$row['email']}</td>\n");
-                echo("</tr>\n");
+                $table = $table . "<tr><th>{$i}</th><td>{$row['anomalia_id']}</td><td>{$row['item_id']}</td><td>{$row['email']}</td></tr>";
+            }
+            $table = $table . "</tbody></table>";
+
+            if (!$i) {
+                echo("<div class=\"alert alert-danger col-md-4 col-md-offset-4 text-center alert-dismissible fade in\" role=\"alert\"><h4>Não há incidências registadas</h4></div>");
+            }
+            else {
+                echo($table);
             }
 
-            echo("</table>\n");
-
             $db = null;
+            
         }
         catch (PDOException $e)
         {
-            echo("<p>ERROR: {$e->getMessage()}</p>");
+            echo("<div class=\"alert alert-danger col-md-4 col-md-offset-4 alert-dismissible fade in\" role=\"alert\"><h4>ERROR: {$e->getMessage()}</h4>
+            <a href=\"incidencia.php\" type=\"button\" class=\"btn btn-danger\">Reload</a></div>");
         }
         ?>
     </body>

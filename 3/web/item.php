@@ -1,3 +1,5 @@
+<?php include "functions.php"; $options = locais(); ?>
+
 <html>
     <head>
         <meta charset="utf-8">
@@ -37,7 +39,7 @@
             </div>
             <div class="form-group">
                 <label for="nome">Local Público do Item</label>
-                <select type="text" class="form-control" name="local" placeholder="Exemplo: O item A refere-se a posição X   ." required="required"><?php include "functions.php"; locais(); ?></select>
+                <select type="text" class="form-control" name="local" placeholder="Exemplo: O item A refere-se a posição X   ." required="required"><?php echo $options; ?></select>
             </div>
             <button type="submit" class="btn btn-success">Adicionar Item</button>
         </form>
