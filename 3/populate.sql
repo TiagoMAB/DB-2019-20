@@ -135,7 +135,7 @@ INSERT INTO incidencia VALUES(84433,    48017,  'email_utilizador_regular_2@emai
 INSERT INTO incidencia VALUES(48651,    63120,  'email_utilizador_qualificado_2@emailorg.com');
 INSERT INTO incidencia VALUES(57003,    39036,  'email_utilizador_qualificado_6@emailorg.com');
 INSERT INTO incidencia VALUES(90833,    39296,  'email_utilizador_regular_7@emailorg.com');
-INSERT INTO incidencia VALUES(99350,    67703,  'email_utilizador_qualificado_3@emailorg.com');
+INSERT INTO incidencia VALUES(99350,    65728,  'email_utilizador_qualificado_3@emailorg.com');
 INSERT INTO incidencia VALUES(81151,    23466,  'email_utilizador_regular_5@emailorg.com');
 
  --  proposta_de_correcao   --

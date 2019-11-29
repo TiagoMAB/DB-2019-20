@@ -30,7 +30,7 @@ HAVING COUNT(id) = (
 
 
 SELECT DISTINCT email
-FROM (item INNER JOIN incidencia ON item.id = incidencia.item_id) I
+FROM incidencia I
 WHERE NOT EXISTS (
 	(SELECT local_publico.latitude, local_publico.longitude
 	 FROM anomalia INNER JOIN incidencia ON anomalia.id = anomalia_id INNER JOIN item ON item.id = item_id RIGHT OUTER JOIN local_publico ON item.latitude = local_publico.latitude AND item.longitude = local_publico.longitude
@@ -44,7 +44,7 @@ WHERE NOT EXISTS (
 
 
 SELECT DISTINCT email
-FROM (incidencia NATURAL JOIN correcao) A
+FROM (incidencia NATURAL JOIN utilizador_qualificado) A
 WHERE EXISTS (
 	(SELECT anomalia_id
 	 FROM anomalia INNER JOIN incidencia ON anomalia.id = incidencia.anomalia_id INNER JOIN item ON incidencia.item_id = item.id
