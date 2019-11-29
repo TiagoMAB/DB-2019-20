@@ -57,6 +57,7 @@ function emails() {
 
     return $options;
 }
+
 function anomalias() {
 
     include "settings.php";
@@ -72,7 +73,26 @@ function anomalias() {
         $i += 1;
         $options = $options . "<option value=\"{$row['id']}\"> {$i} - {$row['id']} </option>\n";
     }
+
+    return $options;
+}
+
+function todas_anomalias() {
+
+    include "settings.php";
     
+    $sql = "SELECT id FROM anomalia";
+    $result = $db->prepare($sql);
+    $result->execute();
+    
+    $options = "";
+    $i = 0;
+    foreach($result as $row)
+    {
+        $i += 1;
+        $options = $options . "<option value=\"{$row['id']}\"> {$i} - {$row['id']} </option>\n";
+    }
+
     return $options;
 }
 ?>

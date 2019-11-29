@@ -50,6 +50,7 @@
         {
             echo("<div class=\"alert alert-danger col-md-4 col-md-offset-4 alert-dismissible fade in\" role=\"alert\"><h4>ERROR: {$e->getMessage()}</h4>
             <a href=\"incidencia.php\" type=\"button\" class=\"btn btn-danger\">Reload</a></div>");
+            exit();
         }
 
         if ($anomalias != "") {

@@ -1,5 +1,3 @@
-<?php include "functions.php"; $options = locais(); ?>
-
 <html>
     <head>
         <meta charset="utf-8">
@@ -22,6 +20,17 @@
         <div class="jumbotron text-center">
             <h1>Itens</h1>
         </div>  
+        <?php 
+        try {
+            include "functions.php"; $options = locais(); 
+        }
+        catch (PDOException $e)
+        {
+            echo("<div class=\"alert alert-danger col-md-4 col-md-offset-4 alert-dismissible fade in\" role=\"alert\"><h4>ERROR: {$e->getMessage()}</h4>
+            <a href=\"item.php\" type=\"button\" class=\"btn btn-danger\">Reload</a></div>");
+            exit();
+        }
+        ?>
 
         
         <form class="container" action="item.php" method="post">
@@ -55,7 +64,7 @@
             $localizacao = $_REQUEST['localizacao'];
             $local = $_REQUEST['local'];
             
-            if ($id != null && $descricao != null && $localizacao != null && $local != null) {
+            if ($id && $descricao && $localizacao && $local) {
 
                 $local = explode("|", $local);
                 $sql = "INSERT INTO item VALUES (:id, :descricao, :localizacao, :latitude, :longitude) ";
@@ -66,7 +75,7 @@
                 header("Location: /item.php");
                 exit();
             }
-            else if ($id != null) {
+            else if ($id) {
                 $sql = "DELETE FROM item WHERE id = :id ";
 
                 $result = $db->prepare($sql);

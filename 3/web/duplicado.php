@@ -1,6 +1,4 @@
 
-<?php include "functions.php"; $options = itens(); ?>
-
 <html>
     <head>
         <meta charset="utf-8">
@@ -24,20 +22,35 @@
             <h1>Duplicados</h1>
         </div>  
 
-        <form class="container" action="duplicado.php" method="post">
-        <div class="form-group">
-                <label for="nome">Item 1</label>
-                <select type="text" class="form-control" name="item1" ." required="required"><?php echo $options; ?></select>
-            </div>
-            <div class="form-group">
-                <label for="nome">Item 2</label>
-                <select type="text" class="form-control" name="item2" ." required="required"><?php echo $options; ?></select>
-            </div>
-            <button type="submit" class="btn btn-success">Registar Duplicado</button>
-        </form>
-        <br>
-
-        <?php
+        <?php 
+        try {
+            include "functions.php"; $options = itens(); 
+        }
+        catch (PDOException $e)
+        {
+            echo("<div class=\"alert alert-danger col-md-4 col-md-offset-4 alert-dismissible fade in\" role=\"alert\"><h4>ERROR: {$e->getMessage()}</h4>
+            <a href=\"item.php\" type=\"button\" class=\"btn btn-danger\">Reload</a></div>");
+            exit();
+        }
+       
+        if ($options != "") {
+            echo ("<form class=\"container\" action=\"duplicado.php\" method=\"post\">
+            <div class=\"form-group\">
+                    <label for=\"nome\">Item 1</label>
+                    <select type=\"text\" class=\"form-control\" name=\"item1\" .\" required=\"required\">{$options}</select>
+                </div>
+                <div class=\"form-group\">
+                    <label for=\"nome\">Item 2</label>
+                    <select type=\"text\" class=\"form-control\" name=\"item2\" .\" required=\"required\">$options}</select>
+                </div>
+                <button type=\"submit\" class=\"btn btn-success\">Registar Duplicado</button>
+            </form>
+            <br>");
+        }
+        else {
+            echo("<div class=\"alert alert-danger col-md-4 col-md-offset-4 text-center alert-dismissible fade in\" role=\"alert\"><h4>Não há itens para registar duplicados</h4></div>");
+        }
+ 
         try
         {
             include "settings.php";
@@ -53,7 +66,7 @@
 
                 $db = null;
                 header("Location: /duplicado.php");
-                exit;
+                exit();
             }
 
             $sql = "SELECT * FROM duplicado;";
