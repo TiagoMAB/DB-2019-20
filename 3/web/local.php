@@ -48,32 +48,14 @@
             $latitude = $_REQUEST['latitude'];
             $longitude = $_REQUEST['longitude'];
 
-            $sql = "SELECT nome, latitude, longitude FROM local_publico;";
-            $result = $db->prepare($sql);
-            $result->execute();
-            
-            $table = "";
-            $table = $table . "<table class=\"table table-hover \"><thead><tr><th>#</th><th>Nome do Local</th><th>Latitude</th><th>Longitude</th><th>Ações</th></tr></thead><tbody>";
-            $i = 0;
-            foreach($result as $row)
-            {
-                $i += 1;
-                $table = $table . "<tr><th>{$i}</th><td>{$row['nome']}</td><td>{$row['latitude']}</td><td>{$row['longitude']}</td><td><a href=\"local.php?nome={$row['nome']}\">Remover local</a></td></tr>";
-            }
-            $table = $table . "</tbody></table>";
-            if (!$i) {
-                echo("<div class=\"alert alert-danger col-md-4 col-md-offset-4 text-center alert-dismissible fade in\" role=\"alert\"><h4>Não há locais registados</h4></div>");
-            }
-            else {
-                echo($table);
-            }
-             
             if ($nome != null && $latitude == null && $longitude == null) {
 
                 $sql = "DELETE FROM local_publico WHERE nome = :nome ";
 
                 $result = $db->prepare($sql);
                 $result->execute([':nome' => $nome]);
+                $db = null;
+                header("Location: /local.php");
             }
             else if ($nome != null && $latitude != null && $longitude != null) {
                 $sql = "INSERT INTO local_publico VALUES (:latitude, :longitude, :nome) ";
@@ -82,10 +64,33 @@
 
                 $result = $db->prepare($sql);
                 $result->execute([':latitude' => $latitude, ':longitude' => $longitude, ':nome' => $nome]);
-                
+                $db = null;
+                header("Location: /local.php");
             }
-            $db = null;
 
+            $sql = "SELECT nome, latitude, longitude FROM local_publico;";
+            $result = $db->prepare($sql);
+            $result->execute();
+            
+            $table = "";
+            $table = $table . "<table class=\"table table-hover \"><thead><tr><th>#</th><th>Nome do Local</th><th>Latitude</th><th>Longitude</th><th>Ações</th></tr></thead><tbody>";
+            
+            $i = 0;
+            foreach($result as $row)
+            {
+                $i += 1;
+                $table = $table . "<tr><th>{$i}</th><td>{$row['nome']}</td><td>{$row['latitude']}</td><td>{$row['longitude']}</td><td><a href=\"local.php?nome={$row['nome']}\">Remover local</a></td></tr>";
+            }
+            $table = $table . "</tbody></table>";
+
+            if (!$i) {
+                echo("<div class=\"alert alert-danger col-md-4 col-md-offset-4 text-center alert-dismissible fade in\" role=\"alert\"><h4>Não há locais registados</h4></div>");
+            }
+            else {
+                echo($table);
+            }
+
+            $db = null;
         }
         catch (PDOException $e)
         {
