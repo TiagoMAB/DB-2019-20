@@ -41,13 +41,13 @@
             </div>
             <div class="form-inline">
                 <div class="form-group">
-                    <label for="x">X  </label>
+                    <label for="x">X1  </label>
                     <input type="number" class="form-control" step="any" name="x" placeholder="Introduza um valor" required="required">
-                    <label for="y">  Y  </label>
+                    <label for="y">  Y1  </label>
                     <input type="number" class="form-control" step="any" name="y" placeholder="Introduza um valor" required="required">
-                    <label for="x1">  X1  </label>
+                    <label for="x1">  X2  </label>
                     <input type="number" class="form-control" step="any" name="x1" placeholder="Introduza um valor" required="required">
-                    <label for="y1">  Y1  </label>
+                    <label for="y1">  Y2  </label>
                     <input type="number" class="form-control" step="any" name="y1" placeholder="Introduza um valor" required="required"> 
                     <label for="redacao">  Redação? </label>
                     <input type="checkbox" name="redacao" value=1> 
@@ -66,9 +66,9 @@
                     <input type="number" class="form-control" step="any" name="x2" placeholder="Introduza um valor">
                     <label for="y">  Y1</label>
                     <input type="number" class="form-control" step="any" name="y2" placeholder="Introduza um valor">
-                    <label for="x1">  X1 </label>
+                    <label for="x1">  X2 </label>
                     <input type="number" class="form-control" step="any" name="x21" placeholder="Introduza um valor">
-                    <label for="y1">  Y1</label>
+                    <label for="y1">  Y2</label>
                     <input type="number" class="form-control" step="any" name="y21" placeholder="Introduza um valor"> 
                 </div>
             </div>
