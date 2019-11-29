@@ -62,9 +62,9 @@
             </div>
             <div class="form-inline">
                 <div class="form-group">
-                    <label for="x">X</label>
+                    <label for="x">X1</label>
                     <input type="number" class="form-control" step="any" name="x2" placeholder="Introduza um valor">
-                    <label for="y">  Y</label>
+                    <label for="y">  Y1</label>
                     <input type="number" class="form-control" step="any" name="y2" placeholder="Introduza um valor">
                     <label for="x1">  X1 </label>
                     <input type="number" class="form-control" step="any" name="x21" placeholder="Introduza um valor">
@@ -83,14 +83,15 @@
         {
             include "settings.php";
 
-            if ($_REQUEST['id'] != null && $_REQUEST['lingua'] == null) {
+            if ($_REQUEST['id'] != null && $_REQUEST['mode'] != null) {
+                $id = $_REQUEST['id'];
 
                 $sql = "DELETE FROM anomalia WHERE id = :id ";
 
                 $result = $db->prepare($sql);
                 $result->execute([':id' => $id]);
             }
-            else if ($_REQUEST['id'] != null && $_REQUEST['lingua'] != null) {
+            else if ($_REQUEST['id'] != null && $_REQUEST['mode'] == null) {
                 $id = $_REQUEST['id'];
                 $lingua = $_REQUEST['lingua'];
                 $imagem = $_REQUEST['imagem'];
@@ -145,7 +146,7 @@
             {
                 $i += 1;
                 $redacao = $row['tem_anomalia_redacao'] ? "Sim" : "Não"; 
-                $table = $table . "<tr><th>{$i}</th><td>{$row['id']}</td><td>{$row['zona']}</td><td>{$row['lingua']}</td><td>{$row['ts']}</td><td>{$row['descricao']}</td><td>{$redacao}</td><td><a href=\"anomalia.php?id={$row['id']}\">Remover</a></td></tr>";
+                $table = $table . "<tr><th>{$i}</th><td>{$row['id']}</td><td>{$row['zona']}</td><td>{$row['lingua']}</td><td>{$row['ts']}</td><td>{$row['descricao']}</td><td>{$redacao}</td><td><a href=\"anomalia.php?mode=0&&id={$row['id']}\">Remover</a></td></tr>";
             }
             $table = $table . "</tbody></table>";
 
