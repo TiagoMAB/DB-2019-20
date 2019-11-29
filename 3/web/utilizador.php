@@ -14,7 +14,7 @@
             <li role="presentation"><a href="item.php">Itens</a></li>
             <li role="presentation"><a href="anomalia.php">Anomalias</a></li>
             <li role="presentation"><a href="correcao.php">Correções e Propostas de Correção</a></li>
-            <li role="presentation"><a href="local.php">Incidências</a></li>
+            <li role="presentation"><a href="incidencia.php">Incidências</a></li>
             <li role="presentation"><a href="duplicado.php">Duplicados</a></li>
             <li role="presentation"><a href="listar.php">Listar</a></li>
         </ul>

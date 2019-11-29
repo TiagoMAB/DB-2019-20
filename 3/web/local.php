@@ -12,7 +12,7 @@
             <li role="presentation"><a href="item.php">Itens</a></li>
             <li role="presentation"><a href="anomalia.php">Anomalias</a></li>
             <li role="presentation"><a href="correcao.php">Correções e Propostas de Correção</a></li>
-            <li role="presentation"><a href="local.php">Incidências</a></li>
+            <li role="presentation"><a href="incidencia.php">Incidências</a></li>
             <li role="presentation"><a href="duplicado.php">Duplicados</a></li>
             <li role="presentation"><a href="listar.php">Listar</a></li>
         </ul>
@@ -54,18 +54,12 @@
 
                 $result = $db->prepare($sql);
                 $result->execute([':nome' => $nome]);
-                $db = null;
-                header("Location: /local.php");
             }
             else if ($nome != null && $latitude != null && $longitude != null) {
                 $sql = "INSERT INTO local_publico VALUES (:latitude, :longitude, :nome) ";
-                
-                echo("<p>$sql</p>");
 
                 $result = $db->prepare($sql);
                 $result->execute([':latitude' => $latitude, ':longitude' => $longitude, ':nome' => $nome]);
-                $db = null;
-                header("Location: /local.php");
             }
 
             $sql = "SELECT nome, latitude, longitude FROM local_publico;";
@@ -79,7 +73,7 @@
             foreach($result as $row)
             {
                 $i += 1;
-                $table = $table . "<tr><th>{$i}</th><td>{$row['nome']}</td><td>{$row['latitude']}</td><td>{$row['longitude']}</td><td><a href=\"local.php?nome={$row['nome']}\">Remover local</a></td></tr>";
+                $table = $table . "<tr><th>{$i}</th><td>{$row['nome']}</td><td>{$row['latitude']}</td><td>{$row['longitude']}</td><td><a href=\"local.php?nome={$row['nome']}\">Remover</a></td></tr>";
             }
             $table = $table . "</tbody></table>";
 
@@ -94,7 +88,8 @@
         }
         catch (PDOException $e)
         {
-            echo("<div class=\"alert alert-danger col-md-4 col-md-offset-4 alert-dismissible fade in\" role=\"alert\"><h4>ERROR: {$e->getMessage()}</h4></div>");
+            echo("<div class=\"alert alert-danger col-md-4 col-md-offset-4 alert-dismissible fade in\" role=\"alert\"><h4>ERROR: {$e->getMessage()}</h4>
+            <a href=\"local.php\" type=\"button\" class=\"btn btn-danger\">Reload</a></div>");
         }
         ?>
     </body>
