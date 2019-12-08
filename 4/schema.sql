@@ -25,6 +25,10 @@ DROP TRIGGER IF EXISTS cancel_utilizador_email_update ON utilizador;
 DROP TRIGGER IF EXISTS cancel_utilizador_qualificado_email_update ON utilizador_qualificado;
 DROP TRIGGER IF EXISTS cancel_utilizador_regular_email_update ON utilizador_regular;
 
+DROP INDEX IF EXISTS proposta_de_correcao_data_index;
+DROP INDEX IF EXISTS incidencia_anomalia_id_index;
+DROP INDEX IF EXISTS correcao_anomalia_id_index;
+
 ----------------------------------------
 -- Functions
 ----------------------------------------
@@ -162,6 +166,7 @@ CREATE TABLE correcao
 -- Triggers
 ----------------------------------------
 
+--RI-1
 CREATE FUNCTION cancel_anomalia_traducao_zona_update_proc()
 RETURNS TRIGGER 
 AS
@@ -187,6 +192,7 @@ CREATE TRIGGER cancel_anomalia_traducao_zona_update BEFORE UPDATE ON anomalia_tr
 FOR EACH ROW EXECUTE PROCEDURE cancel_anomalia_traducao_zona_update_proc();
 
 
+--RI-2
 CREATE FUNCTION cancel_anomalia_traducao_lingua_update_proc()
 RETURNS TRIGGER 
 AS
@@ -206,6 +212,7 @@ CREATE TRIGGER cancel_anomalia_traducao_lingua_update BEFORE UPDATE ON anomalia_
 FOR EACH ROW EXECUTE PROCEDURE cancel_anomalia_traducao_lingua_update_proc();
 
 
+--RI-4
 CREATE FUNCTION cancel_utilizador_email_update_proc ()
 RETURNS TRIGGER
 AS
@@ -225,6 +232,7 @@ CREATE TRIGGER cancel_utilizador_email_update BEFORE UPDATE ON utilizador
 FOR EACH ROW EXECUTE PROCEDURE cancel_utilizador_email_update_proc();
 
 
+--RI-5
 CREATE FUNCTION cancel_utilizador_qualificado_email_update_proc ()
 RETURNS TRIGGER
 AS
@@ -244,6 +252,7 @@ CREATE TRIGGER cancel_utilizador_qualificado_email_update BEFORE UPDATE ON utili
 FOR EACH ROW EXECUTE PROCEDURE cancel_utilizador_qualificado_email_update_proc();
 
 
+--RI-6
 CREATE FUNCTION cancel_utilizador_regular_email_update_proc ()
 RETURNS TRIGGER
 AS
@@ -266,3 +275,12 @@ FOR EACH ROW EXECUTE PROCEDURE cancel_utilizador_regular_email_update_proc();
 ----------------------------------------
 -- Indexes
 ----------------------------------------
+
+--1
+CREATE INDEX proposta_de_correcao_data_index ON proposta_de_correcao USING BTREE(data_hora);
+
+--2
+CREATE INDEX incidencia_anomalia_id_index ON incidencia USING BTREE(anomalia_id);
+
+--3
+CREATE INDEX correcao_anomalia_id_index ON correcao USING BTREE(anomalia_id);
