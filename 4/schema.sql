@@ -180,7 +180,7 @@ BEGIN
     SELECT zona[1] INTO z1p2 FROM anomalia WHERE new.id = id;
     SELECT new.zona2[0] INTO z2p1;
 	SELECT new.zona2[1] INTO z2p2;
-    IF (z1p1[0] < z2p2[0] OR z2p1[0] < z1p2[0] OR z1p2[1] > z2p1[1] OR z2p2[1] > z1p1[1]) THEN
+    IF NOT (z1p1[0] < z2p2[0] OR z2p1[0] < z1p2[0] OR z1p2[1] > z2p1[1] OR z2p2[1] > z1p1[1]) THEN
         RAISE EXCEPTION '(RI-1) A zona da ​anomalia_tradução, % %,​ não se pode sobrepor à zona da ​anomalia​ correspondente, % %', z2p1,z2p2,z1p1,z1p2;
     END IF;
     return new;
@@ -200,7 +200,7 @@ $$
 DECLARE anomalia_lingua VARCHAR(255);
 BEGIN
     SELECT lingua INTO anomalia_lingua FROM anomalia WHERE new.id = id;
-    IF (new.lingua2 <> anomalia_lingua) THEN
+    IF NOT (new.lingua2 <> anomalia_lingua) THEN
         RAISE EXCEPTION '(RI-2) A língua da ​anomalia_tradução​, %, não pode ser igual à língua da ​anomalia​ correspondente, %', new.lingua2, anomalia_lingua;
     END IF;
     return new;
