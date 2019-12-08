@@ -13,6 +13,22 @@ DROP TABLE IF EXISTS correcao CASCADE;
 DROP FUNCTION IF EXISTS verificaUtilizador;
 DROP FUNCTION IF EXISTS verificaAnomalia;
 
+DROP FUNCTION IF EXISTS cancel_anomalia_traducao_zona_update_proc;
+DROP FUNCTION IF EXISTS cancel_anomalia_traducao_lingua_update_proc;
+DROP FUNCTION IF EXISTS cancel_utilizador_email_update_proc;
+DROP FUNCTION IF EXISTS cancel_utilizador_qualificado_email_update_proc;
+DROP FUNCTION IF EXISTS cancel_utilizador_regular_email_update_proc;
+
+DROP TRIGGER IF EXISTS cancel_anomalia_traducao_zona_update ON anomalia_traducao;
+DROP TRIGGER IF EXISTS cancel_anomalia_traducao_lingua_update ON anomalia_traducao;
+DROP TRIGGER IF EXISTS cancel_utilizador_email_update ON utilizador;
+DROP TRIGGER IF EXISTS cancel_utilizador_qualificado_email_update ON utilizador_qualificado;
+DROP TRIGGER IF EXISTS cancel_utilizador_regular_email_update ON utilizador_regular;
+
+----------------------------------------
+-- Functions
+----------------------------------------
+
 CREATE FUNCTION verificaUtilizador (emailAVerificar VARCHAR(255), qualificado INTEGER)
 RETURNS BOOLEAN
 AS
@@ -50,6 +66,10 @@ BEGIN
 END;
 $$
 LANGUAGE plpgsql;
+
+----------------------------------------
+-- Tables
+----------------------------------------
 
 CREATE TABLE local_publico
    (latitude 	            FLOAT	        NOT NULL,
@@ -135,3 +155,114 @@ CREATE TABLE correcao
     PRIMARY KEY(email, nro, anomalia_id),
     FOREIGN KEY(email, nro) REFERENCES proposta_de_correcao(email, nro) ON DELETE CASCADE,
     FOREIGN KEY (anomalia_id) REFERENCES incidencia(anomalia_id) ON DELETE CASCADE ON UPDATE CASCADE);
+
+
+
+----------------------------------------
+-- Triggers
+----------------------------------------
+
+CREATE FUNCTION cancel_anomalia_traducao_zona_update_proc()
+RETURNS TRIGGER 
+AS
+$$
+DECLARE z1p1 POINT;
+DECLARE z1p2 POINT;
+DECLARE z2p1 POINT;
+DECLARE z2p2 POINT;
+BEGIN 
+    SELECT zona[0] INTO z1p1 FROM anomalia WHERE new.id = id;
+    SELECT zona[1] INTO z1p2 FROM anomalia WHERE new.id = id;
+    SELECT new.zona2[0] INTO z2p1;
+	SELECT new.zona2[1] INTO z2p2;
+    IF (z1p1[0] < z2p2[0] OR z2p1[0] < z1p2[0] OR z1p2[1] > z2p1[1] OR z2p2[1] > z1p1[1]) THEN
+        RAISE EXCEPTION '(RI-1) A zona da ​anomalia_tradução, % %,​ não se pode sobrepor à zona da ​anomalia​ correspondente, % %', z2p1,z2p2,z1p1,z1p2;
+    END IF;
+    return new;
+END;
+$$
+LANGUAGE plpgsql;
+
+CREATE TRIGGER cancel_anomalia_traducao_zona_update BEFORE UPDATE ON anomalia_traducao
+FOR EACH ROW EXECUTE PROCEDURE cancel_anomalia_traducao_zona_update_proc();
+
+
+CREATE FUNCTION cancel_anomalia_traducao_lingua_update_proc()
+RETURNS TRIGGER 
+AS
+$$
+DECLARE anomalia_lingua VARCHAR(255);
+BEGIN
+    SELECT lingua INTO anomalia_lingua FROM anomalia WHERE new.id = id;
+    IF (new.lingua2 <> anomalia_lingua) THEN
+        RAISE EXCEPTION '(RI-2) A língua da ​anomalia_tradução​, %, não pode ser igual à língua da ​anomalia​ correspondente, %', new.lingua2, anomalia_lingua;
+    END IF;
+    return new;
+END;
+$$
+LANGUAGE plpgsql;
+
+CREATE TRIGGER cancel_anomalia_traducao_lingua_update BEFORE UPDATE ON anomalia_traducao
+FOR EACH ROW EXECUTE PROCEDURE cancel_anomalia_traducao_lingua_update_proc();
+
+
+CREATE FUNCTION cancel_utilizador_email_update_proc ()
+RETURNS TRIGGER
+AS
+$$
+DECLARE emailAVerificar VARCHAR(255);
+BEGIN
+    SELECT new.email INTO emailAVerificar; 
+    IF (EXISTS (SELECT email FROM utilizador_regular U WHERE U.email = emailAVerificar) OR EXISTS (SELECT email FROM utilizador_qualificado U WHERE U.email = emailAVerificar)) THEN
+        return new;
+	END IF;
+    RAISE EXCEPTION '(RI-4) email de utilizador, %, tem de figurar em ​utilizador_qualificado​ ou ​utilizador_regular', emailAVerificar;
+END;
+$$
+LANGUAGE plpgsql;
+
+CREATE TRIGGER cancel_utilizador_email_update BEFORE UPDATE ON utilizador
+FOR EACH ROW EXECUTE PROCEDURE cancel_utilizador_email_update_proc();
+
+
+CREATE FUNCTION cancel_utilizador_qualificado_email_update_proc ()
+RETURNS TRIGGER
+AS
+$$
+DECLARE emailAVerificar VARCHAR(255);
+BEGIN
+    SELECT new.email INTO emailAVerificar; 
+    IF (EXISTS (SELECT email FROM utilizador_regular U WHERE U.email = emailAVerificar)) THEN
+        RAISE EXCEPTION '(RI-5) email, %, não pode figurar em ​utilizador_regular', emailAVerificar;
+	END IF;
+    return new;
+END;
+$$
+LANGUAGE plpgsql;
+
+CREATE TRIGGER cancel_utilizador_qualificado_email_update BEFORE UPDATE ON utilizador_qualificado
+FOR EACH ROW EXECUTE PROCEDURE cancel_utilizador_qualificado_email_update_proc();
+
+
+CREATE FUNCTION cancel_utilizador_regular_email_update_proc ()
+RETURNS TRIGGER
+AS
+$$
+DECLARE emailAVerificar VARCHAR(255);
+BEGIN
+    SELECT new.email INTO emailAVerificar; 
+    IF (EXISTS (SELECT email FROM utilizador_qualificado U WHERE U.email = emailAVerificar)) THEN
+        RAISE EXCEPTION '(RI-6) email, %, não pode figurar em utilizador_qualificado', emailAVerificar;
+	END IF;
+    return new;
+END;
+$$
+LANGUAGE plpgsql;
+
+CREATE TRIGGER cancel_utilizador_regular_email_update BEFORE UPDATE ON utilizador_regular
+FOR EACH ROW EXECUTE PROCEDURE cancel_utilizador_regular_email_update_proc();
+
+
+----------------------------------------
+-- Indexes
+----------------------------------------
