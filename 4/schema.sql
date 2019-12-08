@@ -16,14 +16,14 @@ DROP FUNCTION IF EXISTS verificaAnomalia;
 DROP FUNCTION IF EXISTS cancel_anomalia_traducao_zona_update_proc;
 DROP FUNCTION IF EXISTS cancel_anomalia_traducao_lingua_update_proc;
 DROP FUNCTION IF EXISTS cancel_utilizador_email_update_proc;
-DROP FUNCTION IF EXISTS cancel_utilizador_qualificado_email_update_proc;
-DROP FUNCTION IF EXISTS cancel_utilizador_regular_email_update_proc;
+DROP FUNCTION IF EXISTS cancel_utilizador_qualificado_email_insert_proc;
+DROP FUNCTION IF EXISTS cancel_utilizador_regular_email_insert_proc;
 
 DROP TRIGGER IF EXISTS cancel_anomalia_traducao_zona_update ON anomalia_traducao;
 DROP TRIGGER IF EXISTS cancel_anomalia_traducao_lingua_update ON anomalia_traducao;
 DROP TRIGGER IF EXISTS cancel_utilizador_email_update ON utilizador;
-DROP TRIGGER IF EXISTS cancel_utilizador_qualificado_email_update ON utilizador_qualificado;
-DROP TRIGGER IF EXISTS cancel_utilizador_regular_email_update ON utilizador_regular;
+DROP TRIGGER IF EXISTS cancel_utilizador_qualificado_email_insert ON utilizador_qualificado;
+DROP TRIGGER IF EXISTS cancel_utilizador_regular_email_insert ON utilizador_regular;
 
 DROP INDEX IF EXISTS proposta_de_correcao_data_index;
 DROP INDEX IF EXISTS incidencia_anomalia_id_index;
@@ -213,7 +213,7 @@ FOR EACH ROW EXECUTE PROCEDURE cancel_anomalia_traducao_lingua_update_proc();
 
 
 --RI-4
-CREATE FUNCTION cancel_utilizador_email_update_proc ()
+CREATE FUNCTION cancel_utilizador_email_update_proc()
 RETURNS TRIGGER
 AS
 $$
@@ -233,7 +233,7 @@ FOR EACH ROW EXECUTE PROCEDURE cancel_utilizador_email_update_proc();
 
 
 --RI-5
-CREATE FUNCTION cancel_utilizador_qualificado_email_update_proc ()
+CREATE FUNCTION cancel_utilizador_qualificado_email_insert_proc()
 RETURNS TRIGGER
 AS
 $$
@@ -248,12 +248,12 @@ END;
 $$
 LANGUAGE plpgsql;
 
-CREATE TRIGGER cancel_utilizador_qualificado_email_update BEFORE UPDATE ON utilizador_qualificado
-FOR EACH ROW EXECUTE PROCEDURE cancel_utilizador_qualificado_email_update_proc();
+CREATE TRIGGER cancel_utilizador_qualificado_email_insert BEFORE INSERT ON utilizador_qualificado
+FOR EACH ROW EXECUTE PROCEDURE cancel_utilizador_qualificado_email_insert_proc();
 
 
 --RI-6
-CREATE FUNCTION cancel_utilizador_regular_email_update_proc ()
+CREATE FUNCTION cancel_utilizador_regular_email_insert_proc()
 RETURNS TRIGGER
 AS
 $$
@@ -268,8 +268,8 @@ END;
 $$
 LANGUAGE plpgsql;
 
-CREATE TRIGGER cancel_utilizador_regular_email_update BEFORE UPDATE ON utilizador_regular
-FOR EACH ROW EXECUTE PROCEDURE cancel_utilizador_regular_email_update_proc();
+CREATE TRIGGER cancel_utilizador_regular_email_insert BEFORE INSERT ON utilizador_regular
+FOR EACH ROW EXECUTE PROCEDURE cancel_utilizador_regular_email_insert_proc();
 
 
 ----------------------------------------
