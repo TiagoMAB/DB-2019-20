@@ -13,14 +13,15 @@ DROP TABLE IF EXISTS correcao CASCADE;
 DROP FUNCTION IF EXISTS verificaUtilizador;
 DROP FUNCTION IF EXISTS verificaAnomalia;
 
-DROP FUNCTION IF EXISTS cancel_anomalia_traducao_zona_update_proc;
-DROP FUNCTION IF EXISTS cancel_anomalia_traducao_lingua_update_proc;
+DROP FUNCTION IF EXISTS cancel_anomalia_traducao_zona_func;
+DROP FUNCTION IF EXISTS cancel_anomalia_zona_func;
 DROP FUNCTION IF EXISTS cancel_utilizador_email_update_proc;
 DROP FUNCTION IF EXISTS cancel_utilizador_qualificado_email_insert_proc;
 DROP FUNCTION IF EXISTS cancel_utilizador_regular_email_insert_proc;
 
+DROP TRIGGER IF EXISTS cancel_anomalia_traducao_zona_insert ON anomalia_traducao;
 DROP TRIGGER IF EXISTS cancel_anomalia_traducao_zona_update ON anomalia_traducao;
-DROP TRIGGER IF EXISTS cancel_anomalia_traducao_lingua_update ON anomalia_traducao;
+DROP TRIGGER IF EXISTS cancel_anomalia_zona_update ON anomalia;
 DROP TRIGGER IF EXISTS cancel_utilizador_email_update ON utilizador;
 DROP TRIGGER IF EXISTS cancel_utilizador_qualificado_email_insert ON utilizador_qualificado;
 DROP TRIGGER IF EXISTS cancel_utilizador_regular_email_insert ON utilizador_regular;
@@ -167,7 +168,7 @@ CREATE TABLE correcao
 ----------------------------------------
 
 --RI-1
-CREATE FUNCTION cancel_anomalia_traducao_zona_update_proc()
+CREATE FUNCTION cancel_anomalia_traducao_zona_func()
 RETURNS TRIGGER 
 AS
 $$
@@ -176,40 +177,49 @@ DECLARE z1p2 POINT;
 DECLARE z2p1 POINT;
 DECLARE z2p2 POINT;
 BEGIN 
-    SELECT zona[0] INTO z1p1 FROM anomalia WHERE new.id = id;
-    SELECT zona[1] INTO z1p2 FROM anomalia WHERE new.id = id;
+    SELECT zona[0] INTO z1p1 FROM anomalia WHERE new.id = anomalia.id;
+    SELECT zona[1] INTO z1p2 FROM anomalia WHERE new.id = anomalia.id;
     SELECT new.zona2[0] INTO z2p1;
 	SELECT new.zona2[1] INTO z2p2;
     IF NOT (z1p1[0] < z2p2[0] OR z2p1[0] < z1p2[0] OR z1p2[1] > z2p1[1] OR z2p2[1] > z1p1[1]) THEN
-        RAISE EXCEPTION '(RI-1) A zona da ​anomalia_tradução, % %,​ não se pode sobrepor à zona da ​anomalia​ correspondente, % %', z2p1,z2p2,z1p1,z1p2;
+        RAISE EXCEPTION '(RI-1) A zona da anomalia_tradução, % %, não se pode sobrepor à zona da anomalia correspondente, % %', z2p1,z2p2,z1p1,z1p2;
     END IF;
     return new;
 END;
 $$
 LANGUAGE plpgsql;
 
+CREATE TRIGGER cancel_anomalia_traducao_zona_insert BEFORE INSERT ON anomalia_traducao
+FOR EACH ROW EXECUTE FUNCTION cancel_anomalia_traducao_zona_func();
+
 CREATE TRIGGER cancel_anomalia_traducao_zona_update BEFORE UPDATE ON anomalia_traducao
-FOR EACH ROW EXECUTE PROCEDURE cancel_anomalia_traducao_zona_update_proc();
+FOR EACH ROW EXECUTE FUNCTION cancel_anomalia_traducao_zona_func();
 
-
---RI-2
-CREATE FUNCTION cancel_anomalia_traducao_lingua_update_proc()
+CREATE FUNCTION cancel_anomalia_zona_func()
 RETURNS TRIGGER 
 AS
 $$
-DECLARE anomalia_lingua VARCHAR(255);
+DECLARE z1p1 POINT;
+DECLARE z1p2 POINT;
+DECLARE z2p1 POINT;
+DECLARE z2p2 POINT;
 BEGIN
-    SELECT lingua INTO anomalia_lingua FROM anomalia WHERE new.id = id;
-    IF NOT (new.lingua2 <> anomalia_lingua) THEN
-        RAISE EXCEPTION '(RI-2) A língua da ​anomalia_tradução​, %, não pode ser igual à língua da ​anomalia​ correspondente, %', new.lingua2, anomalia_lingua;
+    IF EXISTS (SELECT * FROM anomalia_traducao WHERE anomalia_traducao.id = new.id) THEN
+        SELECT zona2[0] INTO z2p1 FROM anomalia_traducao WHERE new.id = anomalia_traducao.id;
+        SELECT zona2[1] INTO z2p2 FROM anomalia_traducao WHERE new.id = anomalia_traducao.id;
+        SELECT new.zona[0] INTO z1p1;
+        SELECT new.zona[1] INTO z1p2;
+        IF NOT (z1p1[0] < z2p2[0] OR z2p1[0] < z1p2[0] OR z1p2[1] > z2p1[1] OR z2p2[1] > z1p1[1]) THEN
+            RAISE EXCEPTION '(RI-1) A zona da anomalia_tradução, % %, não se pode sobrepor à zona da anomalia correspondente, % %', z2p1,z2p2,z1p1,z1p2;
+        END IF;
     END IF;
     return new;
 END;
 $$
 LANGUAGE plpgsql;
 
-CREATE TRIGGER cancel_anomalia_traducao_lingua_update BEFORE UPDATE ON anomalia_traducao
-FOR EACH ROW EXECUTE PROCEDURE cancel_anomalia_traducao_lingua_update_proc();
+CREATE TRIGGER cancel_anomalia_zona_update BEFORE UPDATE ON anomalia
+FOR EACH ROW EXECUTE FUNCTION cancel_anomalia_zona_func();
 
 
 --RI-4
@@ -283,4 +293,21 @@ CREATE INDEX proposta_de_correcao_data_index ON proposta_de_correcao USING BTREE
 CREATE INDEX incidencia_anomalia_id_index ON incidencia USING BTREE(anomalia_id);
 
 --3
+
+-- 
+
 CREATE INDEX correcao_anomalia_id_index ON correcao USING BTREE(anomalia_id);
+
+--4
+
+-- Escolhemos um índice com chave composta para lingua, ts e tem_anomalia_redacao pois temos uma condição de seleção
+-- para estes três atributos. É utilizado BTREE em vez de hash table pois temos condições de desigualdade e 
+-- Hash table só suporta eficientemente queries que só utilizam condições com igualdades. Como a condição de seleção para
+-- lingua é mais seletiva, o índice ordena primeiro por lingua, ordenando depois por tem_anomalia_redacao
+-- e finalmente ts, pois para um range maior de ts, se ordenarmos primeiro por ts, entradas na tabela que cumprem as
+-- condições de lingua e tem_anomalia_redacao podem estar mais longes uma da outra.
+
+CREATE INDEX index4 ON anomalia USING BTREE(lingua, tem_anomalia_redacao, ts);
+-- seletividade dos atributos na query discutivel
+-- rever justificação para ter em conta o clustering
+-- talvez retirar tem_anomalia_redacao pois tem baixa cardinalidade, logo o indice pode nao valer a pena
