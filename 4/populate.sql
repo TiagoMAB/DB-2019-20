@@ -8,7 +8,7 @@ INSERT INTO local_publico VALUES (39.336775,    -8.936379,      'Rio Maior');
 INSERT INTO local_publico VALUES (12.315582,    -113.825682,    'Museu');
 INSERT INTO local_publico VALUES (-63.517234,   -170.091125,    'Pastelaria');
 INSERT INTO local_publico VALUES (5.104156,     118.120951,     'Biblioteca');
-INSERT INTO local_publico VALUES (-10.123159,    91.134814,      'Restaurante');
+INSERT INTO local_publico VALUES (-10.123159,    91.134814,     'Restaurante');
 INSERT INTO local_publico VALUES (-46.256365,   -149.128911,    'Escola');
 
 --  item   --
