@@ -11,7 +11,7 @@ DROP TABLE IF EXISTS f_anomalia CASCADE;
 CREATE TABLE d_utilizador
    (id_utilizador           SERIAL	        NOT NULL,
     email 	                VARCHAR(255)	NOT NULL,
-    tipo 	                VARCHAR(255)	    NOT NULL,
+    tipo 	                VARCHAR(255)	NOT NULL,
     PRIMARY KEY(id_utilizador));
 
 CREATE TABLE d_tempo
