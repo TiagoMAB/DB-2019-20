@@ -291,34 +291,3 @@ LANGUAGE plpgsql;
 
 CREATE TRIGGER cancel_utilizador_regular_email_insert BEFORE INSERT ON utilizador_regular
 FOR EACH ROW EXECUTE PROCEDURE cancel_utilizador_regular_email_insert_proc();
-
-
-----------------------------------------
--- Indexes
-----------------------------------------
-
---1
-CREATE INDEX proposta_de_correcao_data_index ON proposta_de_correcao USING BTREE(data_hora);
-
---2
-CREATE INDEX incidencia_anomalia_id_index ON incidencia USING BTREE(anomalia_id);
-
---3
-
--- 
-
-CREATE INDEX correcao_anomalia_id_index ON correcao USING BTREE(anomalia_id);
-
---4
-
--- Escolhemos um índice com chave composta para lingua, ts e tem_anomalia_redacao pois temos uma condição de seleção
--- para estes três atributos. É utilizado BTREE em vez de hash table pois temos condições de desigualdade e 
--- Hash table só suporta eficientemente queries que só utilizam condições com igualdades. Como a condição de seleção para
--- lingua é mais seletiva, o índice ordena primeiro por lingua, ordenando depois por tem_anomalia_redacao
--- e finalmente ts, pois para um range maior de ts, se ordenarmos primeiro por ts, entradas na tabela que cumprem as
--- condições de lingua e tem_anomalia_redacao podem estar mais longes uma da outra.
-
-CREATE INDEX index4 ON anomalia USING BTREE(lingua, tem_anomalia_redacao, ts);
--- seletividade dos atributos na query discutivel
--- rever justificação para ter em conta o clustering
--- talvez retirar tem_anomalia_redacao pois tem baixa cardinalidade, logo o indice pode nao valer a pena

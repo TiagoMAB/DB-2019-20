@@ -91,41 +91,33 @@ INSERT INTO utilizador VALUES('email_utilizador_qualificado_28@emailorg.com',   
 
  --  utilizador_qualificado   --
 
-INSERT INTO utilizador_qualificado VALUES('email_utilizador_qualificado_1@emailorg.com');
-INSERT INTO utilizador_qualificado VALUES('email_utilizador_qualificado_2@emailorg.com');
-INSERT INTO utilizador_qualificado VALUES('email_utilizador_qualificado_3@emailorg.com');
-INSERT INTO utilizador_qualificado VALUES('email_utilizador_qualificado_4@emailorg.com');
-INSERT INTO utilizador_qualificado VALUES('email_utilizador_qualificado_5@emailorg.com');
-INSERT INTO utilizador_qualificado VALUES('email_utilizador_qualificado_6@emailorg.com');
-INSERT INTO utilizador_qualificado VALUES('email_utilizador_qualificado_7@emailorg.com');
-INSERT INTO utilizador_qualificado VALUES('email_utilizador_qualificado_8@emailorg.com');
-INSERT INTO utilizador_qualificado VALUES('email_utilizador_qualificado_11@emailorg.com');
-INSERT INTO utilizador_qualificado VALUES('email_utilizador_qualificado_12@emailorg.com');
-INSERT INTO utilizador_qualificado VALUES('email_utilizador_qualificado_13@emailorg.com');
-INSERT INTO utilizador_qualificado VALUES('email_utilizador_qualificado_14@emailorg.com');
-INSERT INTO utilizador_qualificado VALUES('email_utilizador_qualificado_15@emailorg.com');
-INSERT INTO utilizador_qualificado VALUES('email_utilizador_qualificado_16@emailorg.com');
-INSERT INTO utilizador_qualificado VALUES('email_utilizador_qualificado_17@emailorg.com');
-INSERT INTO utilizador_qualificado VALUES('email_utilizador_qualificado_18@emailorg.com');
-INSERT INTO utilizador_qualificado VALUES('email_utilizador_qualificado_21@emailorg.com');
-INSERT INTO utilizador_qualificado VALUES('email_utilizador_qualificado_22@emailorg.com');
-INSERT INTO utilizador_qualificado VALUES('email_utilizador_qualificado_23@emailorg.com');
-INSERT INTO utilizador_qualificado VALUES('email_utilizador_qualificado_24@emailorg.com');
-INSERT INTO utilizador_qualificado VALUES('email_utilizador_qualificado_25@emailorg.com');
-INSERT INTO utilizador_qualificado VALUES('email_utilizador_qualificado_26@emailorg.com');
-INSERT INTO utilizador_qualificado VALUES('email_utilizador_qualificado_27@emailorg.com');
-INSERT INTO utilizador_qualificado VALUES('email_utilizador_qualificado_28@emailorg.com');
+-- Adicionar entradas ao utilizador qualificado é feito no trigger causado pela remoção de utilizadores regulares, para impedir
+-- um utilizador de ser regular e qualificado ao mesmo tempo e também impedir que um utilizador não seja regular ou qualificado.
 
- --  utilizador_regular   --
-
-INSERT INTO utilizador_regular VALUES('email_utilizador_regular_1@emailorg.com');
-INSERT INTO utilizador_regular VALUES('email_utilizador_regular_2@emailorg.com');
-INSERT INTO utilizador_regular VALUES('email_utilizador_regular_3@emailorg.com');
-INSERT INTO utilizador_regular VALUES('email_utilizador_regular_4@emailorg.com');
-INSERT INTO utilizador_regular VALUES('email_utilizador_regular_5@emailorg.com');
-INSERT INTO utilizador_regular VALUES('email_utilizador_regular_6@emailorg.com');
-INSERT INTO utilizador_regular VALUES('email_utilizador_regular_7@emailorg.com');
-INSERT INTO utilizador_regular VALUES('email_utilizador_regular_8@emailorg.com');
+DELETE FROM utilizador_regular WHERE email = 'email_utilizador_qualificado_1@emailorg.com';
+DELETE FROM utilizador_regular WHERE email = 'email_utilizador_qualificado_2@emailorg.com';
+DELETE FROM utilizador_regular WHERE email = 'email_utilizador_qualificado_3@emailorg.com';
+DELETE FROM utilizador_regular WHERE email = 'email_utilizador_qualificado_4@emailorg.com';
+DELETE FROM utilizador_regular WHERE email = 'email_utilizador_qualificado_5@emailorg.com';
+DELETE FROM utilizador_regular WHERE email = 'email_utilizador_qualificado_6@emailorg.com';
+DELETE FROM utilizador_regular WHERE email = 'email_utilizador_qualificado_7@emailorg.com';
+DELETE FROM utilizador_regular WHERE email = 'email_utilizador_qualificado_8@emailorg.com';
+DELETE FROM utilizador_regular WHERE email = 'email_utilizador_qualificado_11@emailorg.com';
+DELETE FROM utilizador_regular WHERE email = 'email_utilizador_qualificado_12@emailorg.com';
+DELETE FROM utilizador_regular WHERE email = 'email_utilizador_qualificado_13@emailorg.com';
+DELETE FROM utilizador_regular WHERE email = 'email_utilizador_qualificado_14@emailorg.com';
+DELETE FROM utilizador_regular WHERE email = 'email_utilizador_qualificado_15@emailorg.com';
+DELETE FROM utilizador_regular WHERE email = 'email_utilizador_qualificado_16@emailorg.com';
+DELETE FROM utilizador_regular WHERE email = 'email_utilizador_qualificado_17@emailorg.com';
+DELETE FROM utilizador_regular WHERE email = 'email_utilizador_qualificado_18@emailorg.com';
+DELETE FROM utilizador_regular WHERE email = 'email_utilizador_qualificado_21@emailorg.com';
+DELETE FROM utilizador_regular WHERE email = 'email_utilizador_qualificado_22@emailorg.com';
+DELETE FROM utilizador_regular WHERE email = 'email_utilizador_qualificado_23@emailorg.com';
+DELETE FROM utilizador_regular WHERE email = 'email_utilizador_qualificado_24@emailorg.com';
+DELETE FROM utilizador_regular WHERE email = 'email_utilizador_qualificado_25@emailorg.com';
+DELETE FROM utilizador_regular WHERE email = 'email_utilizador_qualificado_26@emailorg.com';
+DELETE FROM utilizador_regular WHERE email = 'email_utilizador_qualificado_27@emailorg.com';
+DELETE FROM utilizador_regular WHERE email = 'email_utilizador_qualificado_28@emailorg.com';
 
  --  incidencia   --
 
