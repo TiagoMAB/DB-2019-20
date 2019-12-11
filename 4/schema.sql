@@ -15,14 +15,18 @@ DROP FUNCTION IF EXISTS verificaAnomalia;
 
 DROP FUNCTION IF EXISTS cancel_anomalia_traducao_zona_func;
 DROP FUNCTION IF EXISTS cancel_anomalia_zona_func;
-DROP FUNCTION IF EXISTS cancel_utilizador_email_update_proc;
+DROP FUNCTION IF EXISTS utilizador_regular_insert_new_proc;
+DROP FUNCTION IF EXISTS utilizador_regular_insert_old_proc;
+DROP FUNCTION IF EXISTS utilizador_qualificado_insert_proc;
 DROP FUNCTION IF EXISTS cancel_utilizador_qualificado_email_insert_proc;
 DROP FUNCTION IF EXISTS cancel_utilizador_regular_email_insert_proc;
 
 DROP TRIGGER IF EXISTS cancel_anomalia_traducao_zona_insert ON anomalia_traducao;
 DROP TRIGGER IF EXISTS cancel_anomalia_traducao_zona_update ON anomalia_traducao;
 DROP TRIGGER IF EXISTS cancel_anomalia_zona_update ON anomalia;
-DROP TRIGGER IF EXISTS cancel_utilizador_email_update ON utilizador;
+DROP TRIGGER IF EXISTS utilizador_insert ON utilizador;
+DROP TRIGGER IF EXISTS utilizador_regular_remove ON utilizador_regular;
+DROP TRIGGER IF EXISTS utilizador_qualificado_remove ON utilizador_qualificado;
 DROP TRIGGER IF EXISTS cancel_utilizador_qualificado_email_insert ON utilizador_qualificado;
 DROP TRIGGER IF EXISTS cancel_utilizador_regular_email_insert ON utilizador_regular;
 
@@ -33,20 +37,6 @@ DROP INDEX IF EXISTS correcao_anomalia_id_index;
 ----------------------------------------
 -- Functions
 ----------------------------------------
-
-CREATE FUNCTION verificaUtilizador (emailAVerificar VARCHAR(255), qualificado INTEGER)
-RETURNS BOOLEAN
-AS
-$$
-BEGIN
-	IF (qualificado = 1 AND EXISTS (SELECT email FROM utilizador_regular U WHERE U.email = emailAVerificar)) OR (qualificado = 0 AND EXISTS (SELECT email FROM utilizador_qualificado U WHERE U.email = emailAVerificar)) THEN
-		RETURN FALSE;
-	ELSE
-		RETURN TRUE;
-	END IF;
-END;
-$$
-LANGUAGE plpgsql;
 
 CREATE FUNCTION verificaAnomalia (id2 INTEGER, zona2 BOX, lingua2 VARCHAR(255))
 RETURNS BOOLEAN
@@ -127,14 +117,12 @@ CREATE TABLE utilizador
 CREATE TABLE utilizador_qualificado
    (email 	                VARCHAR(255)	NOT NULL,
     PRIMARY KEY(email),
-    FOREIGN KEY(email) REFERENCES utilizador(email) ON DELETE CASCADE,
-    CHECK (verificaUtilizador(email, 1) = TRUE));
+    FOREIGN KEY(email) REFERENCES utilizador(email) ON DELETE CASCADE);
 
 CREATE TABLE utilizador_regular
    (email 	                VARCHAR(255)	NOT NULL,
     PRIMARY KEY(email),
-    FOREIGN KEY(email) REFERENCES utilizador(email) ON DELETE CASCADE,
-    CHECK (verificaUtilizador(email, 0) = TRUE));
+    FOREIGN KEY(email) REFERENCES utilizador(email) ON DELETE CASCADE);
 
 CREATE TABLE incidencia
    (anomalia_id 	        INTEGER         NOT NULL,
@@ -222,36 +210,62 @@ CREATE TRIGGER cancel_anomalia_zona_update BEFORE UPDATE ON anomalia
 FOR EACH ROW EXECUTE FUNCTION cancel_anomalia_zona_func();
 
 
---RI-4
-CREATE FUNCTION cancel_utilizador_email_update_proc()
+-- RI 4, 5 e 6
+CREATE FUNCTION utilizador_regular_insert_new_proc()
 RETURNS TRIGGER
 AS
 $$
-DECLARE emailAVerificar VARCHAR(255);
 BEGIN
-    SELECT new.email INTO emailAVerificar; 
-    IF (EXISTS (SELECT email FROM utilizador_regular U WHERE U.email = emailAVerificar) OR EXISTS (SELECT email FROM utilizador_qualificado U WHERE U.email = emailAVerificar)) THEN
-        return new;
-	END IF;
-    RAISE EXCEPTION '(RI-4) email de utilizador, %, tem de figurar em ​utilizador_qualificado​ ou ​utilizador_regular', emailAVerificar;
+    INSERT INTO utilizador_regular(email) VALUES (new.email);
+    return new;
 END;
 $$
 LANGUAGE plpgsql;
 
-CREATE TRIGGER cancel_utilizador_email_update BEFORE UPDATE ON utilizador
-FOR EACH ROW EXECUTE PROCEDURE cancel_utilizador_email_update_proc();
+CREATE TRIGGER utilizador_insert AFTER INSERT ON utilizador
+FOR EACH ROW EXECUTE PROCEDURE utilizador_regular_insert_new_proc();
+
+CREATE FUNCTION utilizador_regular_insert_old_proc()
+RETURNS TRIGGER
+AS
+$$
+BEGIN
+    IF (old.email IN (SELECT email FROM utilizador)) THEN
+        INSERT INTO utilizador_regular(email) VALUES (old.email);
+    END IF;
+    return old;
+END;
+$$
+LANGUAGE plpgsql;
+
+CREATE TRIGGER utilizador_qualificado_remove AFTER DELETE ON utilizador_qualificado
+FOR EACH ROW EXECUTE PROCEDURE utilizador_regular_insert_old_proc();
 
 
---RI-5
+CREATE FUNCTION utilizador_qualificado_insert_proc()
+RETURNS TRIGGER
+AS
+$$
+BEGIN
+    IF (old.email IN (SELECT email FROM utilizador)) THEN
+        INSERT INTO utilizador_qualificado(email) VALUES(old.email);
+    END IF;
+    return old;
+END;
+$$
+LANGUAGE plpgsql;
+
+CREATE TRIGGER utilizador_regular_remove AFTER DELETE ON utilizador_regular
+FOR EACH ROW EXECUTE PROCEDURE utilizador_qualificado_insert_proc();
+
+
 CREATE FUNCTION cancel_utilizador_qualificado_email_insert_proc()
 RETURNS TRIGGER
 AS
 $$
-DECLARE emailAVerificar VARCHAR(255);
 BEGIN
-    SELECT new.email INTO emailAVerificar; 
-    IF (EXISTS (SELECT email FROM utilizador_regular U WHERE U.email = emailAVerificar)) THEN
-        RAISE EXCEPTION '(RI-5) email, %, não pode figurar em ​utilizador_regular', emailAVerificar;
+    IF (EXISTS (SELECT email FROM utilizador_regular U WHERE U.email = new.email)) THEN
+        RAISE EXCEPTION '(RI-5) email, %, não pode figurar em ​utilizador_regular', new.email;
 	END IF;
     return new;
 END;
@@ -262,16 +276,13 @@ CREATE TRIGGER cancel_utilizador_qualificado_email_insert BEFORE INSERT ON utili
 FOR EACH ROW EXECUTE PROCEDURE cancel_utilizador_qualificado_email_insert_proc();
 
 
---RI-6
 CREATE FUNCTION cancel_utilizador_regular_email_insert_proc()
 RETURNS TRIGGER
 AS
 $$
-DECLARE emailAVerificar VARCHAR(255);
-BEGIN
-    SELECT new.email INTO emailAVerificar; 
-    IF (EXISTS (SELECT email FROM utilizador_qualificado U WHERE U.email = emailAVerificar)) THEN
-        RAISE EXCEPTION '(RI-6) email, %, não pode figurar em utilizador_qualificado', emailAVerificar;
+BEGIN 
+    IF (EXISTS (SELECT email FROM utilizador_qualificado U WHERE U.email = new.email)) THEN
+        RAISE EXCEPTION '(RI-6) email, %, não pode figurar em utilizador_qualificado', new.email;
 	END IF;
     return new;
 END;
