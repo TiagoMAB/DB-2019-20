@@ -2,8 +2,8 @@
 -- Populate
 ----------------------------------------
 
-INSERT INTO d_utilizador(email, tipo) (SELECT DISTINCT email, 'utilizador_qualificado' FROM utilizador_qualificado);
-INSERT INTO d_utilizador(email, tipo) (SELECT DISTINCT email, 'utilizador_regular' FROM utilizador_regular);
+INSERT INTO d_utilizador(email, tipo) (SELECT email, 'utilizador_qualificado' FROM utilizador_qualificado);
+INSERT INTO d_utilizador(email, tipo) (SELECT email, 'utilizador_regular' FROM utilizador_regular);
 
 INSERT INTO d_tempo(dia, dia_da_semana, semana, mes, trimestre, ano) (SELECT DISTINCT EXTRACT(DAY FROM ts), EXTRACT(DOW FROM ts), EXTRACT(WEEK FROM ts), EXTRACT(MONTH FROM ts), EXTRACT(QUARTER FROM ts), EXTRACT(YEAR FROM ts) FROM anomalia);
 
