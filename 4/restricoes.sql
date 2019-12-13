@@ -1,5 +1,3 @@
-DROP FUNCTION IF EXISTS verificaUtilizador;
-DROP FUNCTION IF EXISTS verificaAnomalia;
 DROP FUNCTION IF EXISTS cancel_anomalia_traducao_zona_func;
 DROP FUNCTION IF EXISTS cancel_anomalia_zona_func;
 DROP FUNCTION IF EXISTS verify_utilizador_proc;
