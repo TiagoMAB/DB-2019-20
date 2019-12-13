@@ -17,4 +17,4 @@ CREATE INDEX index2 ON incidencia USING HASH(anomalia_id);
 CREATE INDEX index3 ON correcao USING BTREE(anomalia_id);
 
 --4
-CREATE INDEX index4 ON anomalia USING BTREE(lingua, tem_anomalia_redacao, ts);
+CREATE INDEX index4 ON anomalia USING BTREE(ts, lingua, tem_anomalia_redacao);
