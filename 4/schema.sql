@@ -232,9 +232,43 @@ END;
 $$
 LANGUAGE plpgsql;
 
+CREATE FUNCTION verify_utilizador_qualificado_proc()
+RETURNS TRIGGER
+AS
+$$
+BEGIN
+    IF (EXISTS (SELECT email FROM utilizador_regular WHERE utilizador_regular.email = new.email)) THEN
+        RAISE EXCEPTION '(RI-5) email, %, nao pode figurar ​utilizador_regular ', new.email;
+	END IF;
+    return new;
+END;
+$$
+LANGUAGE plpgsql;
+
+CREATE FUNCTION verify_utilizador_regular_proc()
+RETURNS TRIGGER
+AS
+$$
+BEGIN
+    IF (EXISTS (SELECT email FROM utilizador_qualificado WHERE utilizador_qualificado.email = new.email)) THEN
+        RAISE EXCEPTION '(RI-6) email, %, nao pode figurar utilizador_qualificado ', new.email;
+	END IF;
+    return new;
+END;
+$$
+LANGUAGE plpgsql;
+
 CREATE CONSTRAINT TRIGGER verify_utilizador AFTER INSERT ON utilizador
 DEFERRABLE INITIALLY DEFERRED
 FOR EACH ROW EXECUTE PROCEDURE verify_utilizador_proc();
+
+CREATE CONSTRAINT TRIGGER verify_utilizador_regular BEFORE INSERT ON utilizador_regular
+DEFERRABLE INITIALLY DEFERRED
+FOR EACH ROW EXECUTE PROCEDURE verify_utilizador_regular_proc();
+
+CREATE CONSTRAINT TRIGGER verify_utilizador_qualificado BEFORE INSERT ON utilizador_qualificado
+DEFERRABLE INITIALLY DEFERRED
+FOR EACH ROW EXECUTE PROCEDURE verify_utilizador_qualificado_proc();
 
 CREATE CONSTRAINT TRIGGER remove_utilizador_regular AFTER DELETE ON utilizador_regular
 DEFERRABLE INITIALLY DEFERRED
