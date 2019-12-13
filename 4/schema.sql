@@ -15,21 +15,15 @@ DROP FUNCTION IF EXISTS verificaAnomalia;
 
 DROP FUNCTION IF EXISTS cancel_anomalia_traducao_zona_func;
 DROP FUNCTION IF EXISTS cancel_anomalia_zona_func;
-DROP FUNCTION IF EXISTS utilizador_regular_insert_new_proc;
-DROP FUNCTION IF EXISTS utilizador_regular_insert_old_proc;
-DROP FUNCTION IF EXISTS utilizador_qualificado_insert_proc;
-DROP FUNCTION IF EXISTS cancel_utilizador_qualificado_email_insert_proc;
-DROP FUNCTION IF EXISTS cancel_utilizador_regular_email_insert_proc;
+DROP FUNCTION IF EXISTS verify_utilizador_proc;
+DROP FUNCTION IF EXISTS remove_utilizador_proc;
 
 DROP TRIGGER IF EXISTS cancel_anomalia_traducao_zona_insert ON anomalia_traducao;
 DROP TRIGGER IF EXISTS cancel_anomalia_traducao_zona_update ON anomalia_traducao;
 DROP TRIGGER IF EXISTS cancel_anomalia_zona_update ON anomalia;
-DROP TRIGGER IF EXISTS utilizador_insert ON utilizador;
-DROP TRIGGER IF EXISTS utilizador_regular_remove ON utilizador_regular;
-DROP TRIGGER IF EXISTS utilizador_qualificado_remove ON utilizador_qualificado;
-DROP TRIGGER IF EXISTS cancel_utilizador_qualificado_email_insert ON utilizador_qualificado;
-DROP TRIGGER IF EXISTS cancel_utilizador_regular_email_insert ON utilizador_regular;
-
+DROP TRIGGER IF EXISTS verify_utilizador ON utilizador;
+DROP TRIGGER IF EXISTS verify_utilizador_regular ON utilizador_regular;
+DROP TRIGGER IF EXISTS verify_utilizador_qualificado ON utilizador_qualificado;
 DROP INDEX IF EXISTS proposta_de_correcao_data_index;
 DROP INDEX IF EXISTS incidencia_anomalia_id_index;
 DROP INDEX IF EXISTS correcao_anomalia_id_index;
@@ -211,83 +205,41 @@ FOR EACH ROW EXECUTE FUNCTION cancel_anomalia_zona_func();
 
 
 -- RI 4, 5 e 6
-CREATE FUNCTION utilizador_regular_insert_new_proc()
+
+CREATE FUNCTION verify_utilizador_proc()
 RETURNS TRIGGER
 AS
 $$
 BEGIN
-    INSERT INTO utilizador_regular(email) VALUES (new.email);
-    return new;
-END;
-$$
-LANGUAGE plpgsql;
-
-CREATE TRIGGER utilizador_insert AFTER INSERT ON utilizador
-FOR EACH ROW EXECUTE PROCEDURE utilizador_regular_insert_new_proc();
-
-CREATE FUNCTION utilizador_regular_insert_old_proc()
-RETURNS TRIGGER
-AS
-$$
-BEGIN
-    IF (old.email IN (SELECT email FROM utilizador)) THEN
-        INSERT INTO utilizador_regular(email) VALUES (old.email);
-    END IF;
-    return old;
-END;
-$$
-LANGUAGE plpgsql;
-
-CREATE TRIGGER utilizador_qualificado_remove AFTER DELETE ON utilizador_qualificado
-FOR EACH ROW EXECUTE PROCEDURE utilizador_regular_insert_old_proc();
-
-
-CREATE FUNCTION utilizador_qualificado_insert_proc()
-RETURNS TRIGGER
-AS
-$$
-BEGIN
-    IF (old.email IN (SELECT email FROM utilizador)) THEN
-        INSERT INTO utilizador_qualificado(email) VALUES(old.email);
-    END IF;
-    return old;
-END;
-$$
-LANGUAGE plpgsql;
-
-CREATE TRIGGER utilizador_regular_remove AFTER DELETE ON utilizador_regular
-FOR EACH ROW EXECUTE PROCEDURE utilizador_qualificado_insert_proc();
-
-
-CREATE FUNCTION cancel_utilizador_qualificado_email_insert_proc()
-RETURNS TRIGGER
-AS
-$$
-BEGIN
-    IF (EXISTS (SELECT email FROM utilizador_regular U WHERE U.email = new.email)) THEN
-        RAISE EXCEPTION '(RI-5) email, %, não pode figurar em ​utilizador_regular', new.email;
+    IF (NOT EXISTS (SELECT email FROM utilizador_regular WHERE utilizador_regular.email = new.email) AND NOT EXISTS (SELECT email FROM utilizador_qualificado WHERE utilizador_qualificado.email = new.email)) THEN
+        RAISE EXCEPTION '(RI-4) email, %, tem de figurar em ​utilizador_regular ou em ​utilizador_qualificado', new.email;
 	END IF;
     return new;
 END;
 $$
 LANGUAGE plpgsql;
 
-CREATE TRIGGER cancel_utilizador_qualificado_email_insert BEFORE INSERT ON utilizador_qualificado
-FOR EACH ROW EXECUTE PROCEDURE cancel_utilizador_qualificado_email_insert_proc();
-
-
-CREATE FUNCTION cancel_utilizador_regular_email_insert_proc()
+CREATE FUNCTION remove_utilizador_proc()
 RETURNS TRIGGER
 AS
 $$
-BEGIN 
-    IF (EXISTS (SELECT email FROM utilizador_qualificado U WHERE U.email = new.email)) THEN
-        RAISE EXCEPTION '(RI-6) email, %, não pode figurar em utilizador_qualificado', new.email;
+BEGIN
+    IF (EXISTS (SELECT email FROM utilizador WHERE utilizador.email = old.email) AND NOT EXISTS (SELECT email FROM utilizador_regular WHERE utilizador_regular.email = old.email) AND NOT EXISTS (SELECT email FROM utilizador_qualificado WHERE utilizador_qualificado.email = old.email)) THEN
+        RAISE EXCEPTION '(RI-4) email, %, tem de figurar em ​utilizador_regular ou em ​utilizador_qualificado', old.email;
 	END IF;
     return new;
 END;
 $$
 LANGUAGE plpgsql;
 
-CREATE TRIGGER cancel_utilizador_regular_email_insert BEFORE INSERT ON utilizador_regular
-FOR EACH ROW EXECUTE PROCEDURE cancel_utilizador_regular_email_insert_proc();
+CREATE CONSTRAINT TRIGGER verify_utilizador AFTER INSERT ON utilizador
+DEFERRABLE INITIALLY DEFERRED
+FOR EACH ROW EXECUTE PROCEDURE verify_utilizador_proc();
+
+CREATE CONSTRAINT TRIGGER remove_utilizador_regular AFTER DELETE ON utilizador_regular
+DEFERRABLE INITIALLY DEFERRED
+FOR EACH ROW EXECUTE PROCEDURE remove_utilizador_proc();
+
+CREATE CONSTRAINT TRIGGER remove_utilizador_qualificado AFTER DELETE ON utilizador_qualificado
+DEFERRABLE INITIALLY DEFERRED
+FOR EACH ROW EXECUTE PROCEDURE remove_utilizador_proc();
