@@ -36,8 +36,6 @@ CREATE TABLE d_lingua
      lingua 	            VARCHAR(255)	NOT NULL,
      PRIMARY KEY(id_lingua));
 
-DROP TABLE IF EXISTS f_anomalia CASCADE;
-
 CREATE TABLE f_anomalia
     (id_utilizador           SERIAL	        NOT NULL,
      id_tempo                SERIAL	        NOT NULL,
