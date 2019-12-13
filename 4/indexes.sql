@@ -2,6 +2,11 @@
 -- Indexes
 ----------------------------------------
 
+DROP INDEX IF EXISTS index1;
+DROP INDEX IF EXISTS index2;
+DROP INDEX IF EXISTS index3;
+DROP INDEX IF EXISTS index4;
+
 --1.2
 CREATE INDEX index1 ON correcao USING BTREE(data_hora);
 

@@ -28,11 +28,6 @@ DROP TRIGGER IF EXISTS verify_utilizador_qualificado ON utilizador_qualificado;
 DROP TRIGGER IF EXISTS remove_utilizador_regular ON utilizador_regular;
 DROP TRIGGER IF EXISTS remove_utilizador_qualificado ON utilizador_qualificado;
 
-
-DROP INDEX IF EXISTS proposta_de_correcao_data_index;
-DROP INDEX IF EXISTS incidencia_anomalia_id_index;
-DROP INDEX IF EXISTS correcao_anomalia_id_index;
-
 ----------------------------------------
 -- Functions
 ----------------------------------------
@@ -267,10 +262,10 @@ CREATE CONSTRAINT TRIGGER verify_utilizador AFTER INSERT ON utilizador
 DEFERRABLE INITIALLY DEFERRED
 FOR EACH ROW EXECUTE PROCEDURE verify_utilizador_proc();
 
-CREATE CONSTRAINT TRIGGER verify_utilizador_regular BEFORE INSERT ON utilizador_regular
+CREATE TRIGGER verify_utilizador_regular BEFORE INSERT ON utilizador_regular
 FOR EACH ROW EXECUTE PROCEDURE verify_utilizador_regular_proc();
 
-CREATE CONSTRAINT TRIGGER verify_utilizador_qualificado BEFORE INSERT ON utilizador_qualificado
+CREATE TRIGGER verify_utilizador_qualificado BEFORE INSERT ON utilizador_qualificado
 FOR EACH ROW EXECUTE PROCEDURE verify_utilizador_qualificado_proc();
 
 CREATE CONSTRAINT TRIGGER remove_utilizador_regular AFTER DELETE ON utilizador_regular
