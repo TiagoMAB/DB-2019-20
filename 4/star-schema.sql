@@ -36,14 +36,16 @@ CREATE TABLE d_lingua
      lingua 	            VARCHAR(255)	NOT NULL,
      PRIMARY KEY(id_lingua));
 
+DROP TABLE IF EXISTS f_anomalia CASCADE;
 
 CREATE TABLE f_anomalia
     (id_utilizador           SERIAL	        NOT NULL,
      id_tempo                SERIAL	        NOT NULL,
-     id_local                SERIAL         NOT NULL,
+     id_local                SERIAL	        NOT NULL,
      id_lingua               SERIAL         NOT NULL,
      tipo_anomalia           VARCHAR(255)    NOT NULL,
      com_proposta            BOOLEAN        NOT NULL,
+     PRIMARY KEY(id_utilizador, id_tempo, id_local, id_lingua),
      FOREIGN KEY(id_utilizador) REFERENCES d_utilizador(id_utilizador) ON DELETE CASCADE ON UPDATE CASCADE,
      FOREIGN KEY(id_tempo) REFERENCES d_tempo(id_tempo) ON DELETE CASCADE ON UPDATE CASCADE,
      FOREIGN KEY(id_local) REFERENCES d_local(id_local) ON DELETE CASCADE ON UPDATE CASCADE,
