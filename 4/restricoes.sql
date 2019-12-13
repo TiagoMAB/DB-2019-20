@@ -1,10 +1,3 @@
-DROP FUNCTION IF EXISTS cancel_anomalia_traducao_zona_func;
-DROP FUNCTION IF EXISTS cancel_anomalia_zona_func;
-DROP FUNCTION IF EXISTS verify_utilizador_proc;
-DROP FUNCTION IF EXISTS verify_utilizador_regular_proc;
-DROP FUNCTION IF EXISTS verify_utilizador_qualificado_proc;
-DROP FUNCTION IF EXISTS remove_utilizador_proc;
-
 DROP TRIGGER IF EXISTS cancel_anomalia_traducao_zona_insert ON anomalia_traducao;
 DROP TRIGGER IF EXISTS cancel_anomalia_traducao_zona_update ON anomalia_traducao;
 DROP TRIGGER IF EXISTS cancel_anomalia_zona_update ON anomalia;
@@ -15,6 +8,13 @@ DROP TRIGGER IF EXISTS update_utilizador_regular ON utilizador_regular;
 DROP TRIGGER IF EXISTS update_utilizador_qualificado ON utilizador_qualificado;
 DROP TRIGGER IF EXISTS remove_utilizador_regular ON utilizador_regular;
 DROP TRIGGER IF EXISTS remove_utilizador_qualificado ON utilizador_qualificado;
+
+DROP FUNCTION IF EXISTS cancel_anomalia_traducao_zona_func;
+DROP FUNCTION IF EXISTS cancel_anomalia_zona_func;
+DROP FUNCTION IF EXISTS verify_utilizador_proc;
+DROP FUNCTION IF EXISTS verify_utilizador_regular_proc;
+DROP FUNCTION IF EXISTS verify_utilizador_qualificado_proc;
+DROP FUNCTION IF EXISTS remove_utilizador_proc;
 
 ----------------------------------------
 -- Triggers
